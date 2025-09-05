@@ -1,8 +1,9 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { LogoutButton } from "@/app/(auth)/auth/_components/logout-button";
-import { getUserById } from "@/data/user";
 import { DeleteAccountButton } from "../../_components/delete-account-button";
+import { ChangeEmailForm } from "../../_components/change-email-form";
+import { getUserById } from "@/data/user";
 
 export default async function ProfilePage() {
   const session = await auth();
@@ -30,6 +31,15 @@ export default async function ProfilePage() {
         )}
         {/* Add more user info fields here if needed */}
       </div>
+
+      <div className="bg-white dark:bg-zinc-900 rounded-lg shadow p-6">
+        <h2 className="text-lg font-semibold mb-4">Configuración de cuenta</h2>
+        <ChangeEmailForm
+          currentEmail={user?.email || ""}
+          hasPassword={hasPassword}
+        />
+      </div>
+
       <div className="mt-6 space-y-3">
         <LogoutButton />
         <DeleteAccountButton hasPassword={hasPassword} />

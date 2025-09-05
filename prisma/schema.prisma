@@ -19,6 +19,7 @@ model User {
   accounts             Account[]
   verificationTokens   VerificationToken[]
   passwordResetTokens  PasswordResetToken[]
+  emailChangeTokens    EmailChangeToken[]
 
   @@map("users")
 }
@@ -69,4 +70,17 @@ model PasswordResetToken {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("password_reset_tokens")
+}
+
+model EmailChangeToken {
+  id        String   @id @default(cuid())
+  currentEmail String @map("current_email")
+  newEmail     String @map("new_email")
+  token        String @unique
+  expires      DateTime
+  createdAt    DateTime @default(now()) @map("created_at")
+  userId       String   @map("user_id")
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("email_change_tokens")
 }

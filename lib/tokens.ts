@@ -23,3 +23,14 @@ export const generatePasswordResetToken = async (
 
   return { token, expires, email, userId };
 };
+
+export const generateEmailChangeToken = async (
+  currentEmail: string,
+  newEmail: string,
+  userId: string
+) => {
+  const token = crypto.randomInt(100000, 999999).toString(); // 6-digit code
+  const expires = new Date(new Date().getTime() + 3600 * 1000); // 1 hour from now
+
+  return { token, expires, currentEmail, newEmail, userId };
+};
