@@ -108,7 +108,10 @@ export const resendVerificationCode = async (email: string) => {
   );
 
   if (!emailResult.success) {
-    return { error: "Error al enviar el email de verificación. Por favor intenta de nuevo." };
+    return {
+      error:
+        "Error al enviar el email de verificación. Por favor intenta de nuevo.",
+    };
   }
 
   return {

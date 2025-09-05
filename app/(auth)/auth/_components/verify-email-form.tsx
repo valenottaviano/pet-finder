@@ -71,10 +71,12 @@ export function VerifyEmailForm() {
             {tokenFromUrl ? null : (
               <>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Por favor revisa tu email e ingresa el código de verificación de 6 dígitos enviado a: <strong>{email}</strong>
+                  Por favor revisa tu email e ingresa el código de verificación
+                  de 6 dígitos enviado a: <strong>{email}</strong>
                 </p>
                 <p className="text-xs text-muted-foreground mb-4">
-                  ¿No ves el email? Revisa tu carpeta de spam o haz clic en "Reenviar Código" abajo.
+                  ¿No ves el email? Revisa tu carpeta de spam o haz clic en
+                  "Reenviar Código" abajo.
                 </p>
               </>
             )}

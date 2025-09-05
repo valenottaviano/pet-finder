@@ -23,8 +23,8 @@ import { login } from "../_actions/login";
 import { FormSuccess } from "./form-success";
 import { useRouter } from "next/navigation";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-import { resendVerificationCode } from "../_actions/verify-email";
 import Link from "next/link";
+import { resendVerificationCode } from "../_actions/verify-email";
 
 export const LoginForm = () => {
   const router = useRouter();
@@ -138,6 +138,14 @@ export const LoginForm = () => {
                     </FormItem>
                   )}
                 />
+                <div className="text-right">
+                  <Link
+                    href="/auth/reset"
+                    className="text-sm text-blue-600 hover:underline"
+                  >
+                    ¿Olvidaste tu contraseña?
+                  </Link>
+                </div>
               </>
             </div>
             <FormError message={formError} />

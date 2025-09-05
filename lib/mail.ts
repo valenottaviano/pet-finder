@@ -110,13 +110,13 @@ export const sendPasswordResetEmail = async (
       from:
         process.env.RESEND_FROM_EMAIL || "Pet Finder <onboarding@resend.dev>",
       to: [email],
-      subject: "Reset your password",
+      subject: "Restablecer tu contraseña - Pet Finder",
       html: `
         <!DOCTYPE html>
         <html>
           <head>
             <meta charset="utf-8">
-            <title>Reset your password</title>
+            <title>Restablecer tu contraseña</title>
             <style>
               body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -134,36 +134,38 @@ export const sendPasswordResetEmail = async (
             <div class="container">
               <div class="header">
                 <h1>🐾 Pet Finder</h1>
-                <h2>Password Reset</h2>
+                <h2>Restablecer Contraseña</h2>
               </div>
               
               <div class="content">
-                <p>Hi ${name || "there"}! 👋</p>
+                <p>¡Hola ${name || ""}! 👋</p>
                 
-                <p>We received a request to reset your password for your Pet Finder account.</p>
+                <p>Recibimos una solicitud para restablecer la contraseña de tu cuenta de Pet Finder.</p>
                 
                 <p style="text-align: center;">
-                  <a href="${resetLink}" class="button">Reset Password</a>
+                  <a
+                    style="color: white;"
+                   href="${resetLink}" class="button">Restablecer Contraseña</a>
                 </p>
                 
                 <div class="warning">
-                  <strong>⚠️ Security Notice:</strong>
+                  <strong>⚠️ Aviso de Seguridad:</strong>
                   <ul>
-                    <li>This link will expire in 1 hour</li>
-                    <li>If you didn't request this reset, please ignore this email</li>
-                    <li>Your password will remain unchanged</li>
+                    <li>Este enlace expirará en 1 hora</li>
+                    <li>Si no solicitaste este restablecimiento, ignora este email</li>
+                    <li>Tu contraseña permanecerá sin cambios</li>
                   </ul>
                 </div>
                 
-                <p>If the button doesn't work, copy and paste this link into your browser:</p>
+                <p>Si el botón no funciona, copia y pega este enlace en tu navegador:</p>
                 <p style="word-break: break-all; background: #f8f9fa; padding: 10px; border-radius: 4px;">${resetLink}</p>
                 
-                <p>Best regards,<br>The Pet Finder Team</p>
+                <p>Saludos cordiales,<br>El Equipo de Pet Finder</p>
               </div>
               
               <div class="footer">
-                <p>This email was sent to ${email}</p>
-                <p>Pet Finder - Helping pets find their way home 🏠</p>
+                <p>Este email fue enviado a ${email}</p>
+                <p>Pet Finder - Ayudando a las mascotas a encontrar su camino a casa 🏠</p>
               </div>
             </div>
           </body>
