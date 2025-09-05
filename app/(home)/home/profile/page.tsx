@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { LogoutButton } from "@/app/(auth)/auth/_components/logout-button";
 import { DeleteAccountButton } from "../../_components/delete-account-button";
 import { ChangeEmailForm } from "../../_components/change-email-form";
+import { ChangePasswordButton } from "../../_components/change-password-button";
 import { getUserById } from "@/data/user";
 import {
   Card,
@@ -122,10 +123,26 @@ export default async function ProfilePage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ChangeEmailForm
-                currentEmail={user?.email || ""}
-                hasPassword={hasPassword}
-              />
+              <div className="space-y-4">
+                <ChangeEmailForm
+                  currentEmail={user?.email || ""}
+                  hasPassword={hasPassword}
+                />
+
+                <Separator />
+
+                <div className="space-y-2">
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    {hasPassword
+                      ? "Cambiar tu contraseña actual"
+                      : "Configurar una contraseña para tu cuenta"}
+                  </p>
+                  <ChangePasswordButton
+                    userEmail={user?.email || ""}
+                    hasPassword={hasPassword}
+                  />
+                </div>
+              </div>
             </CardContent>
           </Card>
 
