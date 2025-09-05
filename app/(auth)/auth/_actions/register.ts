@@ -16,7 +16,7 @@ export const register = async (
   role: UserRole
 ) => {
   const validatedFields = RegisterSchema.safeParse(values);
-  if (!validatedFields.success) return { error: "Invalid fields" };
+  if (!validatedFields.success) return { error: "Campos inválidos" };
   const { name, email, password } = validatedFields.data;
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -54,7 +54,7 @@ export const register = async (
     // If email fails, we should still allow the user to proceed but show a warning
     return {
       success:
-        "Account created! Please check your email for verification code. If you don't receive it, use the resend option.",
+        "¡Cuenta creada! Por favor revisa tu email para el código de verificación. Si no lo recibes, usa la opción de reenvío.",
       data: newUser.id,
       redirectTo: `/auth/verify-email?email=${encodeURIComponent(email)}`,
     };
@@ -64,7 +64,7 @@ export const register = async (
 
   return {
     success:
-      "Account created successfully! Please check your email for verification code.",
+      "¡Cuenta creada exitosamente! Por favor revisa tu email para el código de verificación.",
     data: newUser.id,
     redirectTo: `/auth/verify-email?email=${encodeURIComponent(email)}`,
   };

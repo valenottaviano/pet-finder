@@ -75,7 +75,7 @@ export function RegisterForm({ role }: { role: UserRole }) {
           }
         })
         .catch((error: any) => {
-          setFormError("Something went wrong!");
+          setFormError("¡Algo salió mal!");
         });
     });
   };

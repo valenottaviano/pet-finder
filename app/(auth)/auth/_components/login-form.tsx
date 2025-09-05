@@ -67,7 +67,7 @@ export const LoginForm = () => {
           }
         })
         .catch((error: any) => {
-          setFormError("Something went wrong!");
+          setFormError("¡Algo salió mal!");
         });
     });
   };
@@ -87,7 +87,7 @@ export const LoginForm = () => {
           }
         })
         .catch((error: any) => {
-          setFormError("Something went wrong!");
+          setFormError("¡Algo salió mal!");
         });
     });
   };
@@ -146,7 +146,7 @@ export const LoginForm = () => {
             {showResendLink && (
               <div className="text-center">
                 <p className="text-sm text-muted-foreground mb-2">
-                  Didn't receive the code?
+                  ¿No recibiste el código?
                 </p>
                 <Button
                   type="button"
@@ -155,24 +155,24 @@ export const LoginForm = () => {
                   disabled={isPending}
                   className="text-sm"
                 >
-                  Request new verification code
+                  Solicitar nuevo código de verificación
                 </Button>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Or{" "}
+                  O{" "}
                   <Link
                     href={`/auth/verify-email?email=${encodeURIComponent(
                       userEmail
                     )}`}
                     className="text-primary hover:underline"
                   >
-                    go to verification page
+                    ir a la página de verificación
                   </Link>
                 </p>
               </div>
             )}
 
             <Button type="submit" className="w-full" disabled={isPending}>
-              Login
+              Iniciar Sesión
             </Button>
           </form>
         </Form>

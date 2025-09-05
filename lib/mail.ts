@@ -16,13 +16,13 @@ export const sendVerificationEmail = async (
       from:
         process.env.RESEND_FROM_EMAIL || "Pet Finder <onboarding@resend.dev>",
       to: [email],
-      subject: "Verify your email address",
+      subject: "Verifica tu dirección de email",
       html: `
         <!DOCTYPE html>
         <html>
           <head>
             <meta charset="utf-8">
-            <title>Verify your email</title>
+            <title>Verifica tu email</title>
             <style>
               body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -42,43 +42,43 @@ export const sendVerificationEmail = async (
             <div class="container">
               <div class="header">
                 <h1>🐾 Pet Finder</h1>
-                <h2>Email Verification</h2>
+                <h2>Verificación de Email</h2>
               </div>
               
               <div class="content">
-                <p>Hi ${name || "there"}! 👋</p>
+                <p>¡Hola ${name || ""}! 👋</p>
                 
-                <p>Welcome to Pet Finder! To complete your registration, please verify your email address using the verification code below:</p>
+                <p>¡Bienvenido a Pet Finder! Para completar tu registro, por favor verifica tu dirección de email usando el código de verificación a continuación:</p>
                 
                 <div class="code-box">
                   <div class="code">${token}</div>
                 </div>
                 
-                <p>Enter this 6-digit code on the verification page, or click the button below:</p>
+                <p>Ingresa este código de 6 dígitos en la página de verificación, o haz clic en el botón a continuación:</p>
                 
                 <p style="text-align: center;">
                   <a 
                   style="color: white;"
-                  href="${confirmLink}" class="button">Verify Email Address</a>
+                  href="${confirmLink}" class="button">Verificar Dirección de Email</a>
                 </p>
                 
                 <div class="warning">
-                  <strong>⚠️ Important:</strong>
+                  <strong>⚠️ Importante:</strong>
                   <ul>
-                    <li>This code will expire in 1 hour</li>
-                    <li>If you didn't create this account, please ignore this email</li>
-                    <li>Don't share this code with anyone</li>
+                    <li>Este código expirará en 1 hora</li>
+                    <li>Si no creaste esta cuenta, por favor ignora este email</li>
+                    <li>No compartas este código con nadie</li>
                   </ul>
                 </div>
                 
-                <p>If you have any questions, feel free to reply to this email.</p>
+                <p>Si tienes alguna pregunta, no dudes en responder a este email.</p>
                 
-                <p>Best regards,<br>The Pet Finder Team</p>
+                <p>Saludos cordiales,<br>El Equipo de Pet Finder</p>
               </div>
               
               <div class="footer">
-                <p>This email was sent to ${email}</p>
-                <p>Pet Finder - Helping pets find their way home 🏠</p>
+                <p>Este email fue enviado a ${email}</p>
+                <p>Pet Finder - Ayudando a las mascotas a encontrar su camino a casa 🏠</p>
               </div>
             </div>
           </body>

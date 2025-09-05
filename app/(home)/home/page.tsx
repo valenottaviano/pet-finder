@@ -27,7 +27,7 @@ export default async function Home() {
           </Avatar>
         </Link>
       </div>
-      <div>Welcome to Pet Finder!</div>
+      <div>¡Bienvenido a Pet Finder!</div>
     </main>
   );
 }

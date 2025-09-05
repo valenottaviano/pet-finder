@@ -13,25 +13,25 @@ export const verifyEmail = async (email: string, token: string) => {
   const existingToken = await getVerificationTokenByToken(token);
 
   if (!existingToken) {
-    return { error: "Invalid or expired verification code!" };
+    return { error: "¡Código de verificación inválido o expirado!" };
   }
 
   if (existingToken.email !== email) {
-    return { error: "Invalid verification code!" };
+    return { error: "¡Código de verificación inválido!" };
   }
 
   const hasExpired = new Date(existingToken.expires) < new Date();
   if (hasExpired) {
-    return { error: "Verification code has expired!" };
+    return { error: "¡El código de verificación ha expirado!" };
   }
 
   const user = await getUserByEmail(email);
   if (!user) {
-    return { error: "User not found!" };
+    return { error: "¡Usuario no encontrado!" };
   }
 
   if (user.emailVerified) {
-    return { error: "Email is already verified!" };
+    return { error: "¡El email ya está verificado!" };
   }
 
   // Update user's emailVerified field
@@ -44,7 +44,7 @@ export const verifyEmail = async (email: string, token: string) => {
   await deleteVerificationToken(existingToken.id);
 
   return {
-    success: "Email verified successfully!",
+    success: "¡Email verificado exitosamente!",
     redirectTo: "/auth/login",
   };
 };
@@ -52,11 +52,11 @@ export const verifyEmail = async (email: string, token: string) => {
 export const resendVerificationCode = async (email: string) => {
   const user = await getUserByEmail(email);
   if (!user) {
-    return { error: "User not found!" };
+    return { error: "¡Usuario no encontrado!" };
   }
 
   if (user.emailVerified) {
-    return { error: "Email is already verified!" };
+    return { error: "¡El email ya está verificado!" };
   }
 
   // Check for existing recent tokens (rate limiting)
@@ -78,7 +78,7 @@ export const resendVerificationCode = async (email: string) => {
         60000
     );
     return {
-      error: `Please wait ${timeLeft} more minutes before requesting a new code.`,
+      error: `Por favor espera ${timeLeft} minutos más antes de solicitar un nuevo código.`,
     };
   }
 
@@ -108,10 +108,10 @@ export const resendVerificationCode = async (email: string) => {
   );
 
   if (!emailResult.success) {
-    return { error: "Failed to send verification email. Please try again." };
+    return { error: "Error al enviar el email de verificación. Por favor intenta de nuevo." };
   }
 
   return {
-    success: "Verification code sent to your email!",
+    success: "¡Código de verificación enviado a tu email!",
   };
 };

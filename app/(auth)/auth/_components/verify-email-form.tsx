@@ -63,7 +63,7 @@ export function VerifyEmailForm() {
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
-        <CardTitle className="text-2xl">Verify Email</CardTitle>
+        <CardTitle className="text-2xl">Verificar Email</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid gap-4">
@@ -71,12 +71,10 @@ export function VerifyEmailForm() {
             {tokenFromUrl ? null : (
               <>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Please check your email and enter the 6-digit verification
-                  code sent to: <strong>{email}</strong>
+                  Por favor revisa tu email e ingresa el código de verificación de 6 dígitos enviado a: <strong>{email}</strong>
                 </p>
                 <p className="text-xs text-muted-foreground mb-4">
-                  Don't see the email? Check your spam folder or click "Resend
-                  Code" below.
+                  ¿No ves el email? Revisa tu carpeta de spam o haz clic en "Reenviar Código" abajo.
                 </p>
               </>
             )}
@@ -105,7 +103,7 @@ export function VerifyEmailForm() {
             className="w-full"
             disabled={isPending || otp.length !== 6}
           >
-            {isPending ? "Verifying..." : "Verify Email"}
+            {isPending ? "Verificando..." : "Verificar Email"}
           </Button>
           <Button
             variant="outline"
@@ -113,7 +111,7 @@ export function VerifyEmailForm() {
             className="w-full"
             disabled={isPending}
           >
-            Resend Code
+            Reenviar Código
           </Button>
         </div>
       </CardContent>

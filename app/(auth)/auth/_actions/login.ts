@@ -14,7 +14,7 @@ export const login = async (
   const validatedFields = LoginSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    return { error: "Invalid fields!" };
+    return { error: "¡Campos inválidos!" };
   }
 
   const { email, password } = validatedFields.data;
@@ -23,13 +23,13 @@ export const login = async (
 
   // If user doesn't exist at all
   if (!existingUser || !existingUser.email) {
-    return { error: "Email does not exist!" };
+    return { error: "¡El email no existe!" };
   }
 
   // If user exists but hasn't verified their email
   if (!existingUser.emailVerified) {
     return {
-      error: "Please verify your email first",
+      error: "Por favor verifica tu email primero",
       redirectTo: `/auth/verify-email?email=${encodeURIComponent(email)}`,
       showResendLink: true,
       email: email,
@@ -39,7 +39,7 @@ export const login = async (
   // If user exists but hasn't set password (invited user)
   if (!existingUser.password) {
     return {
-      error: "Please set your password first",
+      error: "Por favor establece tu contraseña primero",
       redirectTo: `/auth/create-pass?email=${encodeURIComponent(email)}`,
     };
   }
@@ -56,9 +56,9 @@ export const login = async (
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return { error: "Invalid credentials!" };
+          return { error: "¡Credenciales inválidas!" };
         default:
-          return { error: "Something went wrong!" };
+          return { error: "¡Algo salió mal!" };
       }
     }
 
