@@ -81,7 +81,8 @@ export function RegisterForm({ role }: { role: UserRole }) {
   };
 
   return (
-    <div>
+    <Card className="p-5 w-full max-w-[400px] mx-auto">
+      <h2 className="text-2xl font-semibold text-center mb-4">Crear Cuenta</h2>
       <Form {...form}>
         <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <div className="space-y-4">
@@ -147,6 +148,6 @@ export function RegisterForm({ role }: { role: UserRole }) {
           </Button>
         </form>
       </Form>
-    </div>
+    </Card>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,11 +16,19 @@ import { FormSuccess } from "./form-success";
 export function VerifyEmailForm() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
+  const tokenFromUrl = searchParams.get("token") || "";
 
-  const [otp, setOtp] = useState("");
+  const [otp, setOtp] = useState(tokenFromUrl);
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
+
+  // Auto-submit if token is provided in URL
+  useEffect(() => {
+    if (tokenFromUrl && tokenFromUrl.length === 6 && email) {
+      onSubmit();
+    }
+  }, [tokenFromUrl, email]);
 
   const onSubmit = () => {
     setError("");
@@ -60,10 +68,18 @@ export function VerifyEmailForm() {
       <CardContent>
         <div className="grid gap-4">
           <div>
-            <p className="text-sm text-muted-foreground mb-4">
-              Please enter the verification code sent to:{" "}
-              <strong>{email}</strong>
-            </p>
+            {tokenFromUrl ? null : (
+              <>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Please check your email and enter the 6-digit verification
+                  code sent to: <strong>{email}</strong>
+                </p>
+                <p className="text-xs text-muted-foreground mb-4">
+                  Don't see the email? Check your spam folder or click "Resend
+                  Code" below.
+                </p>
+              </>
+            )}
           </div>
           <div className="flex justify-center">
             <InputOTP
@@ -89,7 +105,7 @@ export function VerifyEmailForm() {
             className="w-full"
             disabled={isPending || otp.length !== 6}
           >
-            Verify Email
+            {isPending ? "Verifying..." : "Verify Email"}
           </Button>
           <Button
             variant="outline"

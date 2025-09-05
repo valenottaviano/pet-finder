@@ -7,6 +7,7 @@ import {
   deleteVerificationToken,
 } from "@/data/verification-token";
 import { generateVerificationToken } from "@/lib/tokens";
+import { sendVerificationEmail } from "@/lib/mail";
 
 export const verifyEmail = async (email: string, token: string) => {
   const existingToken = await getVerificationTokenByToken(token);
@@ -99,8 +100,18 @@ export const resendVerificationCode = async (email: string) => {
     },
   });
 
-  // For now, we return the token directly (later you'll send it via email)
+  // Send verification email
+  const emailResult = await sendVerificationEmail(
+    email,
+    token,
+    user.name || undefined
+  );
+
+  if (!emailResult.success) {
+    return { error: "Failed to send verification email. Please try again." };
+  }
+
   return {
-    success: `Verification code sent! Use this code: ${token}`,
+    success: "Verification code sent to your email!",
   };
 };

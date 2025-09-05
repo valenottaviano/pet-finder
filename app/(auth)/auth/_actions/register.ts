@@ -9,6 +9,7 @@ import { getUserByEmail } from "@/data/user";
 import { UserRole } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { generateVerificationToken } from "@/lib/tokens";
+import { sendVerificationEmail } from "@/lib/mail";
 
 export const register = async (
   values: z.infer<typeof RegisterSchema>,
@@ -46,10 +47,24 @@ export const register = async (
     },
   });
 
+  // Send verification email
+  const emailResult = await sendVerificationEmail(email, token, name);
+
+  if (!emailResult.success) {
+    // If email fails, we should still allow the user to proceed but show a warning
+    return {
+      success:
+        "Account created! Please check your email for verification code. If you don't receive it, use the resend option.",
+      data: newUser.id,
+      redirectTo: `/auth/verify-email?email=${encodeURIComponent(email)}`,
+    };
+  }
+
   //   revalidatePath("/admin");
 
   return {
-    success: `Usuario creado exitosamente! Por favor verifica tu email con el código: ${token}`,
+    success:
+      "Account created successfully! Please check your email for verification code.",
     data: newUser.id,
     redirectTo: `/auth/verify-email?email=${encodeURIComponent(email)}`,
   };
