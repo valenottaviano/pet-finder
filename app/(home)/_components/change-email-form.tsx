@@ -26,7 +26,10 @@ interface ChangeEmailFormProps {
   hasPassword: boolean;
 }
 
-export function ChangeEmailForm({ currentEmail, hasPassword }: ChangeEmailFormProps) {
+export function ChangeEmailForm({
+  currentEmail,
+  hasPassword,
+}: ChangeEmailFormProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [formError, setFormError] = useState<string | undefined>("");
   const [formSuccess, setFormSuccess] = useState<string | undefined>("");

@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label";
 import { deleteAccount } from "../_actions/delete-account";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
+import { Trash2 } from "lucide-react";
 
 interface DeleteAccountButtonProps {
   hasPassword: boolean;
@@ -65,7 +66,11 @@ export function DeleteAccountButton({ hasPassword }: DeleteAccountButtonProps) {
   return (
     <AlertDialog open={isOpen} onOpenChange={handleOpenChange}>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" className="w-full">
+        <Button
+          variant="destructive"
+          className="w-full flex items-center gap-2"
+        >
+          <Trash2 className="h-4 w-4" />
           Eliminar cuenta
         </Button>
       </AlertDialogTrigger>

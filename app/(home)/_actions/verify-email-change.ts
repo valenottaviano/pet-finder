@@ -63,8 +63,8 @@ export const verifyEmailChange = async (
   await deleteEmailChangeToken(existingToken.id);
 
   // Return success with logout flag so client can handle signOut
-  return { 
+  return {
     success: "¡Email actualizado exitosamente!",
-    shouldLogout: true
+    shouldLogout: true,
   };
 };
