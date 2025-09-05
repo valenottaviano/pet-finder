@@ -3,8 +3,8 @@ import { UserRole } from "@prisma/client";
 
 export default function RegisterPage() {
   return (
-    <section>
+    <div className="flex h-screen w-full items-center justify-center px-4">
       <RegisterForm role={UserRole.USER} />
-    </section>
+    </div>
   );
 }

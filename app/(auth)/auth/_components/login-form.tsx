@@ -23,12 +23,16 @@ import { login } from "../_actions/login";
 import { FormSuccess } from "./form-success";
 import { useRouter } from "next/navigation";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { resendVerificationCode } from "../_actions/verify-email";
+import Link from "next/link";
 
 export const LoginForm = () => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [formError, setFormError] = useState<string | undefined>("");
   const [formSuccess, setFormSuccess] = useState<string | undefined>("");
+  const [showResendLink, setShowResendLink] = useState(false);
+  const [userEmail, setUserEmail] = useState<string>("");
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -41,6 +45,7 @@ export const LoginForm = () => {
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setFormError("");
     setFormSuccess("");
+    setShowResendLink(false);
 
     startTransition(() => {
       login(values)
@@ -48,11 +53,37 @@ export const LoginForm = () => {
           if (response?.error) {
             form.reset();
             setFormError(response?.error);
+
+            // Show resend link if it's an email verification error
+            if (response?.showResendLink) {
+              setShowResendLink(true);
+              setUserEmail(response?.email || values.email);
+            }
           }
 
           if (response?.success) {
             form.reset();
             router.push(DEFAULT_LOGIN_REDIRECT);
+          }
+        })
+        .catch((error: any) => {
+          setFormError("Something went wrong!");
+        });
+    });
+  };
+
+  const handleResendCode = () => {
+    setFormError("");
+    setFormSuccess("");
+
+    startTransition(() => {
+      resendVerificationCode(userEmail)
+        .then((response: any) => {
+          if (response?.error) {
+            setFormError(response?.error);
+          }
+          if (response?.success) {
+            setFormSuccess(response?.success);
           }
         })
         .catch((error: any) => {
@@ -111,6 +142,35 @@ export const LoginForm = () => {
             </div>
             <FormError message={formError} />
             <FormSuccess message={formSuccess} />
+
+            {showResendLink && (
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground mb-2">
+                  Didn't receive the code?
+                </p>
+                <Button
+                  type="button"
+                  variant="link"
+                  onClick={handleResendCode}
+                  disabled={isPending}
+                  className="text-sm"
+                >
+                  Request new verification code
+                </Button>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Or{" "}
+                  <Link
+                    href={`/auth/verify-email?email=${encodeURIComponent(
+                      userEmail
+                    )}`}
+                    className="text-primary hover:underline"
+                  >
+                    go to verification page
+                  </Link>
+                </p>
+              </div>
+            )}
+
             <Button type="submit" className="w-full" disabled={isPending}>
               Login
             </Button>

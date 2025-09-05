@@ -63,7 +63,15 @@ export function RegisterForm({ role }: { role: UserRole }) {
           if (response?.success) {
             form.reset();
             setFormSuccess(response?.success);
-            router.refresh();
+
+            // Redirect to verification page if redirectTo is provided
+            if (response?.redirectTo) {
+              setTimeout(() => {
+                router.push(response.redirectTo);
+              }, 1500);
+            } else {
+              router.refresh();
+            }
           }
         })
         .catch((error: any) => {

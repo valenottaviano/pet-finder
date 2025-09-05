@@ -17,6 +17,9 @@ export default {
           const user = await getUserByEmail(email);
           if (!user || !user.password) return null;
 
+          // Check if email is verified
+          if (!user.emailVerified) return null;
+
           const passwordsMatch = await bcrypt.compare(password, user.password);
 
           if (passwordsMatch) return user;

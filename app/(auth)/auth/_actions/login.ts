@@ -26,6 +26,16 @@ export const login = async (
     return { error: "Email does not exist!" };
   }
 
+  // If user exists but hasn't verified their email
+  if (!existingUser.emailVerified) {
+    return {
+      error: "Please verify your email first",
+      redirectTo: `/auth/verify-email?email=${encodeURIComponent(email)}`,
+      showResendLink: true,
+      email: email,
+    };
+  }
+
   // If user exists but hasn't set password (invited user)
   if (!existingUser.password) {
     return {

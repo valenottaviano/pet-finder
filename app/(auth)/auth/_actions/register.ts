@@ -8,6 +8,7 @@ import { db } from "@/lib/db";
 import { getUserByEmail } from "@/data/user";
 import { UserRole } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { generateVerificationToken } from "@/lib/tokens";
 
 export const register = async (
   values: z.infer<typeof RegisterSchema>,
@@ -32,11 +33,24 @@ export const register = async (
     },
   });
 
+  // Generate verification token
+  const { token, expires } = await generateVerificationToken(email, newUser.id);
+
+  // Save the token to database
+  await db.verificationToken.create({
+    data: {
+      email,
+      token,
+      expires,
+      userId: newUser.id,
+    },
+  });
+
   //   revalidatePath("/admin");
 
   return {
-    success: "Usuario creado exitosamente!",
+    success: `Usuario creado exitosamente! Por favor verifica tu email con el código: ${token}`,
     data: newUser.id,
-    redirectTo: "/auth/login",
+    redirectTo: `/auth/verify-email?email=${encodeURIComponent(email)}`,
   };
 };
