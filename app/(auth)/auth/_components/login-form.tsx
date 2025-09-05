@@ -22,6 +22,7 @@ import { FormError } from "./form-error";
 import { login } from "../_actions/login";
 import { FormSuccess } from "./form-success";
 import { useRouter } from "next/navigation";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 export const LoginForm = () => {
   const router = useRouter();
@@ -51,8 +52,7 @@ export const LoginForm = () => {
 
           if (response?.success) {
             form.reset();
-            setFormSuccess(response?.success);
-            router.push("/");
+            router.push(DEFAULT_LOGIN_REDIRECT);
           }
         })
         .catch((error: any) => {

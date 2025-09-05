@@ -1,3 +1,5 @@
+// Export NextAuth handlers for GET and POST
+export { GET, POST } from "@/auth";
 import NextAuth, { DefaultSession } from "next-auth";
 import { UserRole } from "@prisma/client";
 
