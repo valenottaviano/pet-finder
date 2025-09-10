@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/select";
 import { createPet } from "../_actions/create-pet";
 import { useRouter } from "next/navigation";
+import { PetImageUpload } from "./pet-image-upload";
 
 export const CreatePetForm = () => {
   const router = useRouter();
@@ -46,6 +47,7 @@ export const CreatePetForm = () => {
       hairType: undefined,
       hairPattern: "",
       color: "",
+      images: [],
     },
   });
 
@@ -297,6 +299,23 @@ export const CreatePetForm = () => {
                     {...field}
                     disabled={isPending}
                     placeholder="Ej: Marrón, negro, blanco, etc."
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="images"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <PetImageUpload
+                    value={field.value || []}
+                    onChange={field.onChange}
+                    disabled={isPending}
                   />
                 </FormControl>
                 <FormMessage />

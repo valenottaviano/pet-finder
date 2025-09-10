@@ -70,4 +70,15 @@ export const CreatePetSchema = z.object({
   hairType: z.enum(["SHORT", "MEDIUM", "LONG", "CURLY", "HAIRLESS"]).optional(),
   hairPattern: z.string().optional(),
   color: z.string().optional(),
+  images: z
+    .array(
+      z.object({
+        url: z.string(),
+        key: z.string(),
+      })
+    )
+    .max(4, {
+      message: "Máximo 4 imágenes permitidas",
+    })
+    .optional(),
 });

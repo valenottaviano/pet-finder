@@ -30,6 +30,7 @@ export const createPet = async (values: z.infer<typeof CreatePetSchema>) => {
     hairType,
     hairPattern,
     color,
+    images,
   } = validatedFields.data;
 
   console.log("Creating pet with data:", {
@@ -42,6 +43,7 @@ export const createPet = async (values: z.infer<typeof CreatePetSchema>) => {
     hairType,
     hairPattern,
     color,
+    images,
   });
 
   try {
@@ -57,6 +59,16 @@ export const createPet = async (values: z.infer<typeof CreatePetSchema>) => {
         hairPattern,
         color,
         userId: session.user.id,
+        photos:
+          images && images.length > 0
+            ? {
+                create: images.map((image, index) => ({
+                  url: image.url,
+                  publicId: image.key,
+                  isPrimary: index === 0, // First image is primary
+                })),
+              }
+            : undefined,
       },
     });
 
