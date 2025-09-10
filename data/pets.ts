@@ -86,3 +86,32 @@ export const getAllPets = async () => {
     return [];
   }
 };
+
+export const getUserPetById = async (petId: string) => {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    return null;
+  }
+
+  try {
+    const pet = await db.pet.findFirst({
+      where: {
+        id: petId,
+        userId: session.user.id,
+      },
+      include: {
+        photos: {
+          orderBy: {
+            isPrimary: "desc",
+          },
+        },
+      },
+    });
+
+    return pet;
+  } catch (error) {
+    console.error("Error fetching user pet:", error);
+    return null;
+  }
+};

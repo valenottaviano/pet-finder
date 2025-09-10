@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Share2, Copy, Check, Eye } from "lucide-react";
+import { Share2, Copy, Check, Eye, Edit } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
@@ -155,19 +155,30 @@ export const PetCard = ({ pet }: PetCardProps) => {
             {pet.color && <p>Color: {pet.color}</p>}
           </div>
 
-          <div className="flex gap-2 pt-2">
-            <Button variant="outline" size="sm" asChild className="flex-1">
-              <Link href={`/p/${pet.id}`}>
-                <Eye className="h-4 w-4 mr-2" />
-                Ver Perfil
-              </Link>
-            </Button>
+          <div className="space-y-2 pt-2">
+            {/* First row - Edit and View Profile */}
+            <div className="flex gap-2">
+              <Button variant="default" size="sm" asChild className="flex-1">
+                <Link href={`/pet/${pet.id}`}>
+                  <Edit className="h-4 w-4 mr-2" />
+                  Editar
+                </Link>
+              </Button>
 
+              <Button variant="outline" size="sm" asChild className="flex-1">
+                <Link href={`/p/${pet.id}`}>
+                  <Eye className="h-4 w-4 mr-2" />
+                  Ver Perfil
+                </Link>
+              </Button>
+            </div>
+
+            {/* Second row - Share */}
             <Button
               variant="outline"
               size="sm"
               onClick={handleShare}
-              className="flex-1"
+              className="w-full"
             >
               {copied ? (
                 <>
