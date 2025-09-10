@@ -50,3 +50,24 @@ export const VerifyNewEmailSchema = z.object({
     message: "Código de verificación requerido",
   }),
 });
+
+export const CreatePetSchema = z.object({
+  name: z.string().min(1, {
+    message: "El nombre es requerido",
+  }),
+  type: z.enum(
+    ["DOG", "CAT", "BIRD", "RABBIT", "HAMSTER", "FISH", "REPTILE", "OTHER"],
+    {
+      message: "Selecciona un tipo de mascota válido",
+    }
+  ),
+  sex: z.enum(["MALE", "FEMALE", "UNKNOWN"], {
+    message: "Selecciona el sexo de la mascota",
+  }),
+  birthDate: z.string().optional(),
+  breed: z.string().optional(),
+  size: z.enum(["SMALL", "MEDIUM", "LARGE", "EXTRA_LARGE"]).optional(),
+  hairType: z.enum(["SHORT", "MEDIUM", "LONG", "CURLY", "HAIRLESS"]).optional(),
+  hairPattern: z.string().optional(),
+  color: z.string().optional(),
+});

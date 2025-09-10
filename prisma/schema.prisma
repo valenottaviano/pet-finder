@@ -20,6 +20,7 @@ model User {
   verificationTokens   VerificationToken[]
   passwordResetTokens  PasswordResetToken[]
   emailChangeTokens    EmailChangeToken[]
+  pets                 Pet[]
 
   @@map("users")
 }
@@ -83,4 +84,68 @@ model EmailChangeToken {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("email_change_tokens")
+}
+
+model Pet {
+  id           String     @id @default(cuid())
+  name         String
+  type         PetType
+  sex          PetSex
+  birthDate    DateTime?  @map("birth_date")
+  breed        String?
+  size         PetSize?
+  hairType     HairType?  @map("hair_type")
+  hairPattern  String?    @map("hair_pattern")
+  color        String?
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+  userId       String     @map("user_id")
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  photos       PetPhoto[]
+
+  @@map("pets")
+}
+
+model PetPhoto {
+  id        String   @id @default(cuid())
+  url       String
+  publicId  String?  @map("public_id") // Para servicios como Cloudinary
+  isPrimary Boolean  @default(false) @map("is_primary")
+  createdAt DateTime @default(now()) @map("created_at")
+  petId     String   @map("pet_id")
+  pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+
+  @@map("pet_photos")
+}
+
+enum PetType {
+  DOG
+  CAT
+  BIRD
+  RABBIT
+  HAMSTER
+  FISH
+  REPTILE
+  OTHER
+}
+
+enum PetSex {
+  MALE
+  FEMALE
+  UNKNOWN
+}
+
+enum PetSize {
+  SMALL
+  MEDIUM
+  LARGE
+  EXTRA_LARGE
+}
+
+enum HairType {
+  SHORT
+  MEDIUM
+  LONG
+  CURLY
+  HAIRLESS
 }
