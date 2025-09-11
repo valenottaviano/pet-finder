@@ -4,6 +4,7 @@ import { LogoutButton } from "@/app/(auth)/auth/_components/logout-button";
 import { DeleteAccountButton } from "../../_components/delete-account-button";
 import { ChangeEmailForm } from "../../_components/change-email-form";
 import { ChangePasswordButton } from "../../_components/change-password-button";
+import { ChangePhoneForm } from "../../_components/change-phone-form";
 import { getUserById } from "@/data/user";
 import {
   Card,
@@ -15,7 +16,15 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { User, Mail, Shield, Settings, LogOut, UserX } from "lucide-react";
+import {
+  User,
+  Mail,
+  Shield,
+  Settings,
+  LogOut,
+  UserX,
+  Phone,
+} from "lucide-react";
 
 export default async function ProfilePage() {
   const session = await auth();
@@ -83,6 +92,16 @@ export default async function ProfilePage() {
                   </p>
                 </div>
 
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                    <Phone className="h-4 w-4" />
+                    <span className="font-medium">Teléfono</span>
+                  </div>
+                  <p className="text-slate-900 dark:text-slate-100 font-medium">
+                    {fullUserData?.phone || "No especificado"}
+                  </p>
+                </div>
+
                 {user?.role && (
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
@@ -126,6 +145,13 @@ export default async function ProfilePage() {
               <div className="space-y-4">
                 <ChangeEmailForm
                   currentEmail={user?.email || ""}
+                  hasPassword={hasPassword}
+                />
+
+                <Separator />
+
+                <ChangePhoneForm
+                  currentPhone={fullUserData?.phone}
                   hasPassword={hasPassword}
                 />
 

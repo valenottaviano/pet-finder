@@ -48,6 +48,7 @@ export const getPetById = async (petId: string) => {
           select: {
             name: true,
             email: true, // We might want to show owner contact for lost pets
+            phone: true, // For WhatsApp contact
           },
         },
       },

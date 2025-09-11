@@ -51,6 +51,22 @@ export const VerifyNewEmailSchema = z.object({
   }),
 });
 
+export const ChangePhoneSchema = z.object({
+  phone: z.union([
+    z
+      .string()
+      .min(1)
+      .regex(/^\+54\s?9?\s?\d{2,4}\s?\d{6,8}$/, {
+        message:
+          "Número de teléfono argentino inválido. Formato: +54 9 11 12345678",
+      }),
+    z.literal(""),
+  ]),
+  currentPassword: z.string().min(1, {
+    message: "La contraseña actual es requerida",
+  }),
+});
+
 export const CreatePetSchema = z.object({
   name: z.string().min(1, {
     message: "El nombre es requerido",

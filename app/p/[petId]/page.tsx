@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, Heart, Info, Mail, User } from "lucide-react";
+import { Calendar, Heart, Info, Mail, User, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Metadata } from "next";
@@ -124,6 +124,21 @@ const getHairTypeLabel = (hairType: string | null) => {
     HAIRLESS: "Sin pelo",
   };
   return hairTypes[hairType] || hairType;
+};
+
+const generateWhatsAppLink = (phone: string, petName: string) => {
+  // Clean the phone number for WhatsApp (remove spaces and special chars except +)
+  const cleanPhone = phone.replace(/\s/g, "");
+  const message = encodeURIComponent(
+    `Hola! Vi tu mascota ${petName} en Pet Finder y me gustaría contactarte.`
+  );
+  return `https://wa.me/${cleanPhone}?text=${message}`;
+};
+
+const formatPhoneDisplay = (phone: string) => {
+  // Remove +54 prefix and format for display
+  const cleanPhone = phone.replace(/^\+54\s?/, "");
+  return `+54 ${cleanPhone}`;
 };
 
 export default async function PublicPetPage({ params }: PageProps) {
@@ -298,14 +313,32 @@ export default async function PublicPetPage({ params }: PageProps) {
                   </div>
                 )}
 
-                <div>
+                <div className="space-y-2">
                   <p className="text-sm text-gray-600">Contacto</p>
-                  <Button variant="outline" className="w-full" asChild>
-                    <a href={`mailto:${pet.user.email}`}>
-                      <Mail className="h-4 w-4 mr-2" />
-                      Contactar Dueño
-                    </a>
-                  </Button>
+                  <div className="space-y-2">
+                    <Button variant="outline" className="w-full" asChild>
+                      <a href={`mailto:${pet.user.email}`}>
+                        <Mail className="h-4 w-4 mr-2" />
+                        Enviar Email
+                      </a>
+                    </Button>
+                    {pet.user.phone && (
+                      <Button
+                        variant="outline"
+                        className="w-full bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
+                        asChild
+                      >
+                        <a
+                          href={generateWhatsAppLink(pet.user.phone, pet.name)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Phone className="h-4 w-4 mr-2" />
+                          WhatsApp {formatPhoneDisplay(pet.user.phone)}
+                        </a>
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -322,6 +355,27 @@ export default async function PublicPetPage({ params }: PageProps) {
           </div>
         </div>
       </div>
+
+      {/* Floating WhatsApp Contact Button */}
+      {pet.user.phone && (
+        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
+          <Button
+            size="lg"
+            className="bg-green-500 hover:bg-green-600 text-white shadow-lg rounded-full px-6 py-3 transition-all duration-200 hover:scale-105"
+            asChild
+          >
+            <a
+              href={generateWhatsAppLink(pet.user.phone, pet.name)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2"
+            >
+              <Phone className="h-5 w-5" />
+              Contactar dueño
+            </a>
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
