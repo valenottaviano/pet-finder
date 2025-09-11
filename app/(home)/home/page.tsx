@@ -3,15 +3,21 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Plus, Phone, AlertTriangle } from "lucide-react";
 import { getUserPets } from "@/data/pets";
+import { getUserById } from "@/data/user";
 import { PetCard } from "../_components/pet-card";
 
 export default async function Home() {
   const session = await auth();
   const user = session?.user;
 
-  if (!session) redirect("/auth/login");
+  if (!session || !user) redirect("/auth/login");
+
+  // Get full user data to check phone number
+  const fullUserData = await getUserById(user.id!);
+  const hasPhoneNumber = !!fullUserData?.phone;
 
   const pets = await getUserPets();
 
@@ -36,6 +42,31 @@ export default async function Home() {
 
       <div className="flex flex-col gap-6">
         <h1 className="text-2xl font-bold">¡Bienvenido a Pet Finder!</h1>
+
+        {/* Phone number warning */}
+        {!hasPhoneNumber && (
+          <Alert className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950">
+            <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400" />
+            <AlertDescription className="text-red-800 dark:text-red-200">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                <span className="font-medium">
+                  Configurá tu número de teléfono para que otros usuarios puedan
+                  contactarte por WhatsApp cuando encuentren a tu mascota.
+                </span>
+                <Link href="/home/profile">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-red-300 text-red-700 hover:bg-red-100 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900"
+                  >
+                    <Phone className="h-4 w-4 mr-2" />
+                    Configurar teléfono
+                  </Button>
+                </Link>
+              </div>
+            </AlertDescription>
+          </Alert>
+        )}
 
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
