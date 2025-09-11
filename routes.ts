@@ -2,7 +2,9 @@
  * Array of public routes. No authentication is required to access these routes.
  * @type {string[]}
  */
-export const publicRoutes = [];
+export const publicRoutes = [
+  "/p/:path*", // Public pet pages and sub-routes
+];
 
 /**
  * Array of authentication routes. Will redirect to DEFAULT_LOGIN_REDIRECT page if user is authenticated.
