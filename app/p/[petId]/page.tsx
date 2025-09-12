@@ -9,9 +9,9 @@ import Link from "next/link";
 import { Metadata } from "next";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     petId: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({

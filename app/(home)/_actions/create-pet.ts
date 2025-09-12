@@ -9,7 +9,14 @@ import * as z from "zod";
 export const createPet = async (values: z.infer<typeof CreatePetSchema>) => {
   const session = await auth();
 
+  console.log("Session data:", {
+    session: session,
+    user: session?.user,
+    userId: session?.user?.id,
+  });
+
   if (!session?.user?.id) {
+    console.error("No user session found");
     return { error: "No autorizado" };
   }
 
@@ -45,6 +52,22 @@ export const createPet = async (values: z.infer<typeof CreatePetSchema>) => {
     color,
     images,
   });
+
+  // Verificar si el usuario existe en la base de datos
+  const userExists = await db.user.findUnique({
+    where: { id: session.user.id },
+  });
+
+  console.log("User exists in database:", {
+    userId: session.user.id,
+    userExists: !!userExists,
+    userEmail: userExists?.email,
+  });
+
+  if (!userExists) {
+    console.error("User not found in database with ID:", session.user.id);
+    return { error: "Usuario no encontrado" };
+  }
 
   try {
     const pet = await db.pet.create({
