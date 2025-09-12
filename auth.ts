@@ -34,7 +34,7 @@ export const {
           credentials.email as string,
           credentials.password as string
         );
-        
+
         if (dbUser) {
           // Update user object with database user data
           user.id = dbUser.id;

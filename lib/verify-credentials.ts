@@ -26,6 +26,6 @@ export async function verifyCredentials(email: string, password: string) {
   } catch (error) {
     console.error("Error verifying credentials:", error);
   }
-  
+
   return null;
 }

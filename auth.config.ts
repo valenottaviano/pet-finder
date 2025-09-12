@@ -11,7 +11,7 @@ export default {
 
         if (validatedFields.success) {
           const { email, password } = validatedFields.data;
-          
+
           // Return the credentials to be handled in the main auth.ts callbacks
           return { email, password };
         }
