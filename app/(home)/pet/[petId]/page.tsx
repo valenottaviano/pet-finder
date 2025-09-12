@@ -8,11 +8,12 @@ import { ArrowLeft, Eye, Share2 } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { CopyLinkButton } from "../../_components/copy-link-button";
+import { QRCodeButton } from "../../_components/qr-code-button";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     petId: string;
-  };
+  }>;
 }
 
 const formatDate = (date: Date | null) => {
@@ -114,6 +115,8 @@ export default async function PetManagementPage({ params }: PageProps) {
                 </Button>
 
                 <CopyLinkButton petId={pet.id} />
+
+                <QRCodeButton petId={pet.id} petName={pet.name} />
               </CardContent>
             </Card>
 
