@@ -1,4 +1,5 @@
 import { getPetById } from "@/data/pets";
+import { isValidPetCode } from "@/lib/pet-codes";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
@@ -143,6 +144,12 @@ const formatPhoneDisplay = (phone: string) => {
 
 export default async function PublicPetPage({ params }: PageProps) {
   const { petId } = await params;
+
+  // Validate pet code format - if it doesn't match, it's likely an old CUID
+  if (!isValidPetCode(petId)) {
+    notFound();
+  }
+
   const pet = await getPetById(petId);
 
   if (!pet) {
