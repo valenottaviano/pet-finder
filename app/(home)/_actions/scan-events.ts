@@ -189,3 +189,61 @@ export async function getPetScanStats(petId: string) {
     return { error: "Error al obtener las estadísticas" };
   }
 }
+
+// Get all scan events for all user pets
+export async function getAllUserScanEvents() {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    return { success: false, error: "No autorizado" };
+  }
+
+  try {
+    const scanEvents = await db.scanEvent.findMany({
+      where: {
+        pet: {
+          userId: session.user.id,
+        },
+      },
+      include: {
+        pet: {
+          select: {
+            id: true,
+            name: true,
+            type: true,
+            photos: {
+              select: {
+                url: true,
+              },
+              take: 1,
+            },
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return {
+      success: true,
+      scanEvents: scanEvents.map((event) => ({
+        id: event.id,
+        latitude: event.latitude,
+        longitude: event.longitude,
+        createdAt: event.createdAt,
+        userAgent: event.userAgent,
+        ipAddress: event.ipAddress,
+        pet: {
+          id: event.pet.id,
+          name: event.pet.name,
+          type: event.pet.type,
+          photo: event.pet.photos[0]?.url || null,
+        },
+      })),
+    };
+  } catch (error) {
+    console.error("Error fetching all user scan events:", error);
+    return { success: false, error: "Error al obtener los escaneos" };
+  }
+}
