@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { CopyLinkButton } from "../../_components/copy-link-button";
 import { QRCodeButton } from "../../_components/qr-code-button";
+import { PetScanEvents } from "../../_components/pet-scan-events";
 
 interface PageProps {
   params: Promise<{
@@ -95,7 +96,7 @@ export default async function PetManagementPage({ params }: PageProps) {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Edit Form */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle>Editar Información</CardTitle>
@@ -104,6 +105,9 @@ export default async function PetManagementPage({ params }: PageProps) {
                 <EditPetForm pet={pet} />
               </CardContent>
             </Card>
+
+            {/* QR Scan Events */}
+            <PetScanEvents petId={pet.id} petName={pet.name} />
           </div>
 
           {/* Actions Sidebar */}

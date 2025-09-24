@@ -1,9 +1,9 @@
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 import { db } from "./lib/db";
-import { getUserById } from "./data/user";
-import { verifyCredentials } from "./lib/verify-credentials";
+import { getUserById, getUserByEmail } from "./data/user";
 
 import authConfig from "./auth.config";
 
@@ -30,12 +30,18 @@ export const {
 
       // Handle credentials provider
       if (credentials?.email && credentials?.password) {
-        const dbUser = await verifyCredentials(
-          credentials.email as string,
-          credentials.password as string
+        const dbUser = await getUserByEmail(credentials.email as string);
+        if (!dbUser || !dbUser.password) return false;
+
+        // Check if email is verified
+        if (!dbUser.emailVerified) return false;
+
+        const passwordsMatch = await bcrypt.compare(
+          credentials.password as string,
+          dbUser.password
         );
 
-        if (dbUser) {
+        if (passwordsMatch) {
           // Update user object with database user data
           user.id = dbUser.id;
           user.email = dbUser.email;
