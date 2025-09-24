@@ -1,4 +1,5 @@
 import { getUserPetById } from "@/data/pets";
+import { isValidPetCode } from "@/lib/pet-codes";
 import { notFound } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -41,6 +42,12 @@ const getPetTypeLabel = (type: string) => {
 
 export default async function PetManagementPage({ params }: PageProps) {
   const { petId } = await params;
+
+  // Validate pet code format - if it doesn't match, it's likely an old CUID
+  if (!isValidPetCode(petId)) {
+    notFound();
+  }
+
   const pet = await getUserPetById(petId);
 
   if (!pet) {

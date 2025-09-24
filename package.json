@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "migrate-pet-ids": "tsx scripts/migrate-pet-ids.ts",
+    "check-pet-codes": "tsx scripts/check-pet-codes.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",

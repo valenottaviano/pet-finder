@@ -3,6 +3,7 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { CreatePetSchema } from "@/schemas";
+import { generateUniquePetCode } from "@/lib/pet-codes";
 import { redirect } from "next/navigation";
 import * as z from "zod";
 
@@ -70,8 +71,46 @@ export const createPet = async (values: z.infer<typeof CreatePetSchema>) => {
   }
 
   try {
+    // Generate unique pet code with retry logic
+    let petId: string;
+    let retries = 0;
+    const maxRetries = 3;
+
+    do {
+      petId = await generateUniquePetCode();
+      retries++;
+
+      // Double-check that the code is still available (race condition protection)
+      const codeStillAvailable = await db.pet.findUnique({
+        where: { id: petId },
+        select: { id: true },
+      });
+
+      if (!codeStillAvailable) {
+        console.log(`Pet code ${petId} confirmed as available`);
+        break;
+      }
+
+      if (retries >= maxRetries) {
+        console.error(
+          `Failed to generate unique pet code after ${maxRetries} retries`
+        );
+        return {
+          error:
+            "Error generando código único para la mascota. Intenta nuevamente.",
+        };
+      }
+
+      console.warn(
+        `Pet code ${petId} was taken between generation and verification, retrying...`
+      );
+    } while (retries < maxRetries);
+
+    console.log(`Creating pet with ID: ${petId}`);
+
     const pet = await db.pet.create({
       data: {
+        id: petId, // Use our generated code
         name,
         type,
         sex,
@@ -95,9 +134,20 @@ export const createPet = async (values: z.infer<typeof CreatePetSchema>) => {
       },
     });
 
-    return { success: "Mascota creada exitosamente!" };
+    console.log("Pet created successfully with ID:", petId);
+    return {
+      success: "Mascota creada exitosamente!",
+      petId: petId, // Return the generated pet ID
+    };
   } catch (error) {
     console.error("Error creating pet:", error);
+
+    // Check if it's a unique constraint violation
+    if (error instanceof Error && error.message.includes("Unique constraint")) {
+      console.error("Unique constraint violation - pet code already exists");
+      return { error: "Error generando código único. Intenta nuevamente." };
+    }
+
     return { error: "Error al crear la mascota" };
   }
 };
