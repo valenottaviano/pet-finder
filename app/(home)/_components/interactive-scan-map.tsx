@@ -4,7 +4,14 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, RefreshCw, Loader2, Calendar, ExternalLink } from "lucide-react";
+import {
+  MapPin,
+  RefreshCw,
+  Loader2,
+  Calendar,
+  Smartphone,
+  ExternalLink,
+} from "lucide-react";
 import { getAllUserScanEvents } from "../_actions/scan-events";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
@@ -27,6 +34,45 @@ interface ScanEvent {
 interface InteractiveScanMapProps {
   className?: string;
 }
+
+// Simple embedded map using OpenStreetMap
+const SimpleMap = ({ scanEvents }: { scanEvents: ScanEvent[] }) => {
+  if (scanEvents.length === 0) return null;
+
+  // Calculate center
+  const centerLat =
+    scanEvents.reduce((sum, event) => sum + event.latitude, 0) /
+    scanEvents.length;
+  const centerLng =
+    scanEvents.reduce((sum, event) => sum + event.longitude, 0) /
+    scanEvents.length;
+
+  // Create markers query string for OpenStreetMap
+  const markers = scanEvents
+    .map(
+      (event, index) => `markers=${event.latitude},${event.longitude},lightblue`
+    )
+    .join("&");
+
+  const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${
+    centerLng - 0.01
+  },${centerLat - 0.01},${centerLng + 0.01},${
+    centerLat + 0.01
+  }&layer=mapnik&marker=${centerLat},${centerLng}`;
+
+  return (
+    <div className="h-96 w-full rounded-lg overflow-hidden border">
+      <iframe
+        src={mapUrl}
+        width="100%"
+        height="100%"
+        style={{ border: "none" }}
+        title="Mapa de escaneos"
+        loading="lazy"
+      />
+    </div>
+  );
+};
 
 export const InteractiveScanMap = ({ className }: InteractiveScanMapProps) => {
   const [scanEvents, setScanEvents] = useState<ScanEvent[]>([]);
@@ -73,20 +119,6 @@ export const InteractiveScanMap = ({ className }: InteractiveScanMapProps) => {
     (event) => event.latitude !== 0 && event.longitude !== 0
   );
 
-  // Calculate center for the map
-  const getMapUrl = () => {
-    if (validScanEvents.length === 0) return null;
-    
-    const centerLat = validScanEvents.reduce((sum, event) => sum + event.latitude, 0) / validScanEvents.length;
-    const centerLng = validScanEvents.reduce((sum, event) => sum + event.longitude, 0) / validScanEvents.length;
-    
-    // Use a slightly larger bounding box for better view
-    const delta = validScanEvents.length === 1 ? 0.005 : 0.02;
-    const bbox = `${centerLng-delta},${centerLat-delta},${centerLng+delta},${centerLat+delta}`;
-    
-    return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${centerLat},${centerLng}`;
-  };
-
   if (!isMounted) {
     return (
       <Card className={className}>
@@ -100,7 +132,9 @@ export const InteractiveScanMap = ({ className }: InteractiveScanMapProps) => {
           <div className="h-96 rounded-lg border flex items-center justify-center">
             <div className="text-center">
               <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">Inicializando mapa...</p>
+              <p className="text-sm text-muted-foreground">
+                Inicializando mapa...
+              </p>
             </div>
           </div>
         </CardContent>
@@ -121,7 +155,9 @@ export const InteractiveScanMap = ({ className }: InteractiveScanMapProps) => {
           <div className="flex items-center justify-center h-96">
             <div className="text-center">
               <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">Cargando escaneos...</p>
+              <p className="text-sm text-muted-foreground">
+                Cargando escaneos...
+              </p>
             </div>
           </div>
         </CardContent>
@@ -163,17 +199,18 @@ export const InteractiveScanMap = ({ className }: InteractiveScanMapProps) => {
         <CardContent>
           <div className="text-center py-8">
             <MapPin className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-            <p className="text-muted-foreground mb-2">No hay escaneos con ubicación disponible</p>
+            <p className="text-muted-foreground mb-2">
+              No hay escaneos con ubicación disponible
+            </p>
             <p className="text-sm text-muted-foreground">
-              Los escaneos aparecerán aquí cuando las personas compartan su ubicación al escanear los códigos QR de tus mascotas.
+              Los escaneos aparecerán aquí cuando las personas compartan su
+              ubicación al escanear los códigos QR de tus mascotas.
             </p>
           </div>
         </CardContent>
       </Card>
     );
   }
-
-  const mapUrl = getMapUrl();
 
   return (
     <Card className={className}>
@@ -185,7 +222,8 @@ export const InteractiveScanMap = ({ className }: InteractiveScanMapProps) => {
           </CardTitle>
           <div className="flex items-center gap-2">
             <Badge variant="outline">
-              {validScanEvents.length} ubicación{validScanEvents.length !== 1 ? 'es' : ''}
+              {validScanEvents.length} ubicación
+              {validScanEvents.length !== 1 ? "es" : ""}
             </Badge>
             <Button variant="outline" size="sm" onClick={fetchScanEvents}>
               <RefreshCw className="h-4 w-4" />
@@ -194,25 +232,19 @@ export const InteractiveScanMap = ({ className }: InteractiveScanMapProps) => {
         </div>
       </CardHeader>
       <CardContent>
-        {mapUrl && (
-          <div className="h-96 rounded-lg overflow-hidden border mb-6">
-            <iframe
-              src={mapUrl}
-              width="100%"
-              height="100%"
-              style={{ border: 'none' }}
-              title="Mapa de escaneos"
-              loading="lazy"
-            />
-          </div>
-        )}
-        
+        <div className="h-96 rounded-lg overflow-hidden border">
+          <SimpleMap scanEvents={validScanEvents} />
+        </div>
+
         {/* Scan Events List */}
-        <div>
+        <div className="mt-6">
           <h3 className="font-medium text-sm mb-3">Escaneos recientes:</h3>
           <div className="space-y-3 max-h-64 overflow-y-auto">
             {validScanEvents.slice(0, 5).map((event) => (
-              <div key={event.id} className="flex items-center justify-between p-3 border rounded-lg bg-muted/50">
+              <div
+                key={event.id}
+                className="flex items-center justify-between p-3 border rounded-lg bg-muted/50"
+              >
                 <div className="flex items-center gap-3">
                   {event.pet.photo && (
                     <img
@@ -222,7 +254,9 @@ export const InteractiveScanMap = ({ className }: InteractiveScanMapProps) => {
                     />
                   )}
                   <div className="min-w-0">
-                    <p className="font-medium text-sm truncate">{event.pet.name}</p>
+                    <p className="font-medium text-sm truncate">
+                      {event.pet.name}
+                    </p>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <Calendar className="h-3 w-3" />
                       <span>
@@ -253,13 +287,16 @@ export const InteractiveScanMap = ({ className }: InteractiveScanMapProps) => {
             )}
           </div>
         </div>
-        
+
         {/* Map Legend */}
         <div className="mt-4 p-3 bg-muted rounded-lg">
           <p className="text-sm font-medium mb-2">Información del mapa:</p>
           <ul className="text-xs text-muted-foreground space-y-1">
-            <li>• El mapa muestra la ubicación aproximada de los escaneos</li>
-            <li>• Haz clic en "Ver en Google Maps" para ubicación exacta</li>
+            <li>
+              • Cada marcador representa un lugar donde se escaneó el código QR
+              de una mascota
+            </li>
+            <li>• Haz clic en los marcadores para ver detalles del escaneo</li>
             <li>• Solo se muestran escaneos donde se compartió la ubicación</li>
           </ul>
         </div>
