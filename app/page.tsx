@@ -7,18 +7,33 @@ export default async function HomePage() {
     <div className="font-sans min-h-screen">
       {/* Hero Section */}
       <div className="bg-yellow-400 py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
-            Never Lose Your Best Friend Again
-          </h1>
-          <p className="text-xl sm:text-2xl text-gray-800 mb-8 max-w-3xl mx-auto">
-            Protect your pets with smart QR codes and instantly connect with their finder. Your peace of mind is just a scan away.
-          </p>
-          <Link href="/auth/register">
-            <Button className="bg-gray-900 text-white text-lg px-8 py-3 rounded-full hover:bg-gray-800">
-              Register Your Pet Today
-            </Button>
-          </Link>
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="text-left">
+              <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
+                Never Lose Your Best Friend Again
+              </h1>
+              <p className="text-xl sm:text-2xl text-gray-800 mb-8 max-w-3xl">
+                Protect your pets with smart QR codes and instantly connect with their finder. Your peace of mind is just a scan away.
+              </p>
+              <Link href="/auth/register">
+                <Button className="bg-gray-900 text-white text-lg px-8 py-3 rounded-full hover:bg-gray-800">
+                  Register Your Pet Today
+                </Button>
+              </Link>
+            </div>
+            <div className="order-first lg:order-last">
+              <div className="relative h-[400px] rounded-2xl overflow-hidden">
+                <Image
+                  src="/images/foto_1.jpg"
+                  alt="Happy person hugging their dog"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -49,6 +64,47 @@ export default async function HomePage() {
                 Join our community forum where neighbors help neighbors. Report found pets and help others reunite with their loved ones.
               </p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Community Section */}
+      <div className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              Join Our Growing Community
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-12">
+              Connect with pet lovers in your area. Together, we create a safer community for our furry friends.
+            </p>
+          </div>
+          <div className="relative h-[500px] md:h-[600px] rounded-2xl overflow-hidden mb-8">
+            <Image
+              src="/images/Community.jpg"
+              alt="Pet owners community gathering"
+              fill
+              className="object-cover object-center"
+              sizes="(max-width: 768px) 100vw, 1200px"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Interactive Map Section */}
+      <div className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              Lost Pets In Your Area
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              View real-time locations of lost pets in your community. Each marker represents a pet waiting to be found and reunited with their family.
+            </p>
+          </div>
+          <div className="w-full h-[600px] bg-gray-100 rounded-xl shadow-inner flex items-center justify-center">
+            {/* Map component will be placed here */}
+            <p className="text-gray-500 text-lg">Interactive map coming soon...</p>
           </div>
         </div>
       </div>
