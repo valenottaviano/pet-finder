@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { CreatePetForm } from "../(home)/_components/create-pet-form";
+import { CreatePetForm } from "../_components/create-pet-form";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
