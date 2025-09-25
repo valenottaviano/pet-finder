@@ -171,7 +171,7 @@ export default async function PublicPetPage({ params }: PageProps) {
               href="/"
               className="text-primary hover:text-primary/80 font-semibold"
             >
-              ← Pet Finder
+              Pet Finder
             </Link>
             <Badge variant="secondary" className="text-sm">
               Perfil Público
