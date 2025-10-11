@@ -88,21 +88,22 @@ model EmailChangeToken {
 }
 
 model Pet {
-  id           String     @id // Removed @default(cuid()) - will be set manually
+  id           String          @id // Removed @default(cuid()) - will be set manually
   name         String
   type         PetType
   sex          PetSex
-  birthDate    DateTime?  @map("birth_date")
+  birthDate    DateTime?       @map("birth_date")
   breed        String?
   size         PetSize?
-  hairType     HairType?  @map("hair_type")
-  hairPattern  String?    @map("hair_pattern")
+  hairType     HairType?       @map("hair_type")
+  hairPattern  String?         @map("hair_pattern")
   color        String?
-  createdAt    DateTime   @default(now()) @map("created_at")
-  updatedAt    DateTime   @updatedAt @map("updated_at")
-  userId       String     @map("user_id")
-  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime        @default(now()) @map("created_at")
+  updatedAt    DateTime        @updatedAt @map("updated_at")
+  userId       String          @map("user_id")
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   photos       PetPhoto[]
+  alertPosts   PetAlertPost[]
 
   @@map("pets")
 }
@@ -117,6 +118,25 @@ model PetPhoto {
   pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
 
   @@map("pet_photos")
+}
+
+model PetAlertPost {
+  id          String          @id @default(cuid())
+  petId       String          @map("pet_id")
+  status      AlertStatus
+  description String?
+  latitude    Float?
+  longitude   Float?
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+  pet         Pet             @relation(fields: [petId], references: [id], onDelete: Cascade)
+
+  @@map("pet_alert_posts")
+}
+
+enum AlertStatus {
+  LOST
+  FOUND
 }
 
 enum PetType {
