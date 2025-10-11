@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { CopyLinkButton } from "../../_components/copy-link-button";
 import { QRCodeButton } from "../../_components/qr-code-button";
+import { LostPetButton } from "../../_components/lost-pet-button";
 import { PetScanEvents } from "../../_components/pet-scan-events";
 
 interface PageProps {
@@ -128,6 +129,8 @@ export default async function PetManagementPage({ params }: PageProps) {
                 <CopyLinkButton petId={pet.id} />
 
                 <QRCodeButton petId={pet.id} petName={pet.name} />
+
+                <LostPetButton petId={pet.id} petName={pet.name} />
               </CardContent>
             </Card>
 
