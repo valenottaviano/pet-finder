@@ -8,6 +8,7 @@ import { Calendar, Heart, Info, Mail, User, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Metadata } from "next";
+import { QRScanHandler } from "./qr-scan-handler";
 
 interface PageProps {
   params: Promise<{
@@ -170,7 +171,7 @@ export default async function PublicPetPage({ params }: PageProps) {
               href="/"
               className="text-primary hover:text-primary/80 font-semibold"
             >
-              ← Pet Finder
+              Pet Finder
             </Link>
             <Badge variant="secondary" className="text-sm">
               Perfil Público
@@ -383,6 +384,9 @@ export default async function PublicPetPage({ params }: PageProps) {
           </Button>
         </div>
       )}
+
+      {/* QR Scan Handler */}
+      <QRScanHandler petId={pet.id} petName={pet.name} />
     </div>
   );
 }

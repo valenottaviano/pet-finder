@@ -8,6 +8,7 @@ import { Plus, Phone, AlertTriangle } from "lucide-react";
 import { getUserPets } from "@/data/pets";
 import { getUserById } from "@/data/user";
 import { PetCard } from "../_components/pet-card";
+import { InteractiveScanMap } from "../_components/interactive-scan-map";
 
 export default async function Home() {
   const session = await auth();
@@ -99,6 +100,13 @@ export default async function Home() {
             </div>
           )}
         </div>
+
+        {/* Interactive Scan Map */}
+        {pets.length > 0 && (
+          <div className="mt-8">
+            <InteractiveScanMap />
+          </div>
+        )}
       </div>
     </main>
   );

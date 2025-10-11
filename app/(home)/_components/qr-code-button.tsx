@@ -26,7 +26,8 @@ export const QRCodeButton = ({ petId, petName }: QRCodeButtonProps) => {
   const generateQRCode = async () => {
     try {
       setIsLoading(true);
-      const url = `${window.location.origin}/p/${petId}`;
+      // Add s=1 parameter to indicate QR scan
+      const url = `${window.location.origin}/p/${petId}?s=1`;
       const qrCodeDataURL = await QRCodeLib.toDataURL(url, {
         width: 300,
         margin: 2,
