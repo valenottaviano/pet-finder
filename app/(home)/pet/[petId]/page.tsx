@@ -1,4 +1,5 @@
 import { getUserPetById } from "@/data/pets";
+import { getPetAlerts } from "@/data/pet-alerts";
 import { isValidPetCode } from "@/lib/pet-codes";
 import { notFound } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,6 +13,7 @@ import { CopyLinkButton } from "../../_components/copy-link-button";
 import { QRCodeButton } from "../../_components/qr-code-button";
 import { LostPetButton } from "../../_components/lost-pet-button";
 import { PetScanEvents } from "../../_components/pet-scan-events";
+import { PetAlertsList } from "../../_components/pet-alerts-list";
 
 interface PageProps {
   params: Promise<{
@@ -55,6 +57,9 @@ export default async function PetManagementPage({ params }: PageProps) {
   if (!pet) {
     notFound();
   }
+
+  // Obtener las alertas de la mascota
+  const alerts = await getPetAlerts(petId);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -106,6 +111,9 @@ export default async function PetManagementPage({ params }: PageProps) {
                 <EditPetForm pet={pet} />
               </CardContent>
             </Card>
+
+            {/* Pet Alerts */}
+            <PetAlertsList alerts={alerts} />
 
             {/* QR Scan Events */}
             <PetScanEvents petId={pet.id} petName={pet.name} />

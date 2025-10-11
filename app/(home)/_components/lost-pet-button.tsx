@@ -46,6 +46,7 @@ interface LostPetButtonProps {
 export const LostPetButton = ({ petId, petName }: LostPetButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, setIsPending] = useState(false);
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
 
   const form = useForm<z.infer<typeof CreatePetAlertSchema>>({
     resolver: zodResolver(CreatePetAlertSchema),
@@ -57,6 +58,51 @@ export const LostPetButton = ({ petId, petName }: LostPetButtonProps) => {
       longitude: -58.3816,
     },
   });
+
+  // Obtener ubicación del usuario cuando se abre el diálogo
+  useEffect(() => {
+    if (isOpen) {
+      setIsLoadingLocation(true);
+
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            form.setValue("latitude", latitude);
+            form.setValue("longitude", longitude);
+            setIsLoadingLocation(false);
+            toast.success("Ubicación obtenida correctamente");
+          },
+          (error) => {
+            console.error("Error getting location:", error);
+            setIsLoadingLocation(false);
+
+            let errorMessage = "No se pudo obtener tu ubicación";
+            if (error.code === error.PERMISSION_DENIED) {
+              errorMessage =
+                "Permiso de ubicación denegado. Usando ubicación por defecto.";
+            } else if (error.code === error.POSITION_UNAVAILABLE) {
+              errorMessage =
+                "Ubicación no disponible. Usando ubicación por defecto.";
+            } else if (error.code === error.TIMEOUT) {
+              errorMessage =
+                "Tiempo de espera agotado. Usando ubicación por defecto.";
+            }
+
+            toast.info(errorMessage);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0,
+          }
+        );
+      } else {
+        setIsLoadingLocation(false);
+        toast.info("Geolocalización no disponible en tu navegador");
+      }
+    }
+  }, [isOpen, form]);
 
   const onSubmit = async (values: z.infer<typeof CreatePetAlertSchema>) => {
     setIsPending(true);
@@ -123,7 +169,14 @@ export const LostPetButton = ({ petId, petName }: LostPetButtonProps) => {
               name="latitude"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ubicación donde se perdió</FormLabel>
+                  <FormLabel>
+                    Ubicación donde se perdió
+                    {isLoadingLocation && (
+                      <span className="ml-2 text-xs text-gray-500">
+                        (Obteniendo tu ubicación...)
+                      </span>
+                    )}
+                  </FormLabel>
                   <FormControl>
                     <MapPicker
                       latitude={field.value}
@@ -132,6 +185,7 @@ export const LostPetButton = ({ petId, petName }: LostPetButtonProps) => {
                         form.setValue("latitude", lat);
                         form.setValue("longitude", lng);
                       }}
+                      isLoading={isLoadingLocation}
                     />
                   </FormControl>
                   <FormMessage />

@@ -120,3 +120,22 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Estilos personalizados para los popups de Leaflet */
+.leaflet-popup-content-wrapper {
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  width: auto !important;
+}
+
+.leaflet-popup-tip {
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.1);
+}
+
+.custom-popup .leaflet-popup-content-wrapper {
+  padding: 0;
+}

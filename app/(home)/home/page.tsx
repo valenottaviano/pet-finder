@@ -4,11 +4,20 @@ import Link from "next/link";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Plus, Phone, AlertTriangle } from "lucide-react";
+import { Plus, Phone, AlertTriangle, Map } from "lucide-react";
 import { getUserPets } from "@/data/pets";
 import { getUserById } from "@/data/user";
+import { getAllLostPetAlerts } from "@/data/pet-alerts";
 import { PetCard } from "../_components/pet-card";
 import { InteractiveScanMap } from "../_components/interactive-scan-map";
+import { GlobalLostPetsMapWrapper } from "../_components/global-lost-pets-map-wrapper";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default async function Home() {
   const session = await auth();
@@ -21,6 +30,9 @@ export default async function Home() {
   const hasPhoneNumber = !!fullUserData?.phone;
 
   const pets = await getUserPets();
+
+  // Get all lost pet alerts
+  const lostPetAlerts = await getAllLostPetAlerts();
 
   return (
     <main className="p-4 flex flex-col gap-4">
@@ -99,6 +111,32 @@ export default async function Home() {
               ))}
             </div>
           )}
+        </div>
+
+        {/* Mapa Global de Mascotas Perdidas */}
+        <div className="mt-8">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Map className="h-5 w-5 text-red-600" />
+                <CardTitle>Mascotas Perdidas Cerca de Ti</CardTitle>
+              </div>
+              <CardDescription>
+                {lostPetAlerts.length > 0
+                  ? `${lostPetAlerts.length} mascota${
+                      lostPetAlerts.length !== 1 ? "s" : ""
+                    } perdida${
+                      lostPetAlerts.length !== 1 ? "s" : ""
+                    } en tu zona. Haz clic en los marcadores para ver detalles y contactar al dueño.`
+                  : "No hay mascotas perdidas reportadas en este momento."}
+              </CardDescription>
+            </CardHeader>
+            {lostPetAlerts.length > 0 && (
+              <CardContent>
+                <GlobalLostPetsMapWrapper alerts={lostPetAlerts} />
+              </CardContent>
+            )}
+          </Card>
         </div>
 
         {/* Interactive Scan Map */}
