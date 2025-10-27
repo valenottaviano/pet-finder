@@ -1,7 +1,10 @@
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
+import Credentials from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
 import { getUserById, getUserByEmail } from "./data/user";
+import { LoginSchema } from "./schemas";
 
 import authConfig from "./auth.config";
 
@@ -13,15 +16,13 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  ...authConfig,
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt",
   },
-  pages: {
-    signIn: "/auth/login",
-    error: "/auth/error",
-  },
   callbacks: {
+    ...authConfig.callbacks,
     async signIn({ user, account, credentials }) {
       // Handle OAuth providers
       if (account?.provider !== "credentials") return true;
@@ -61,5 +62,23 @@ export const {
       return token;
     },
   },
-  ...authConfig,
+  providers: [
+    Credentials({
+      async authorize(credentials) {
+        const validatedFields = LoginSchema.safeParse(credentials);
+
+        if (validatedFields.success) {
+          const { email, password } = validatedFields.data;
+
+          const user = await getUserByEmail(email);
+          if (!user || !user.password) return null;
+
+          const passwordsMatch = await bcrypt.compare(password, user.password);
+
+          if (passwordsMatch) return user;
+        }
+        return null;
+      },
+    }),
+  ],
 });
