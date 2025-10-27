@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcryptjs";
 import { db } from "./lib/db";
 import { getUserById, getUserByEmail } from "./data/user";
 
@@ -36,19 +35,7 @@ export const {
         // Check if email is verified
         if (!dbUser.emailVerified) return false;
 
-        const passwordsMatch = await bcrypt.compare(
-          credentials.password as string,
-          dbUser.password
-        );
-
-        if (passwordsMatch) {
-          // Update user object with database user data
-          user.id = dbUser.id;
-          user.email = dbUser.email;
-          user.name = dbUser.name;
-          user.image = dbUser.image;
-          return true;
-        }
+        return true;
       }
 
       return false;
