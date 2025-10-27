@@ -1,24 +1,24 @@
-import { auth } from "@/auth"
-import { NavigationBar } from "@/components/navigation-bar"
-import { redirect } from "next/navigation"
+import { auth } from "@/auth";
+import { NavigationBar } from "@/components/navigation-bar";
+import { redirect } from "next/navigation";
 
 export default async function HomeLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const session = await auth()
+  const session = await auth();
 
   if (!session) {
-    redirect("/auth/login")
+    redirect("/auth/login");
   }
 
   return (
     <>
       <NavigationBar />
-      <main className="container mx-auto pt-20 pb-20 min-h-screen">
+      <main className="container mx-auto md:pt-20 pb-20 min-h-screen">
         {children}
       </main>
     </>
-  )
+  );
 }

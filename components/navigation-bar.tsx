@@ -1,14 +1,14 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { Button } from './ui/button'
-import { MapIcon, PawPrint, HelpCircle, UserCircle2 } from 'lucide-react'
+import Link from "next/link";
+import { Button } from "./ui/button";
+import { MapIcon, PawPrint, HelpCircle, UserCircle2 } from "lucide-react";
 
 export function NavigationBar() {
   return (
     <>
       {/* Desktop Navigation */}
-      <nav className="fixed top-0 left-0 right-0 h-16 border-b bg-background/80 backdrop-blur-sm hidden md:block z-50">
+      <nav className="fixed top-0 left-0 right-0 h-16 border-b bg-background/80 backdrop-blur-sm hidden md:block z-[9999]">
         <div className="container h-full mx-auto flex items-center justify-between">
           <Link href="/home" className="text-xl font-bold">
             PetFinder
@@ -43,7 +43,7 @@ export function NavigationBar() {
       </nav>
 
       {/* Mobile Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 h-16 border-t bg-background/80 backdrop-blur-sm md:hidden z-50">
+      <nav className="fixed bottom-0 left-0 right-0 h-16 border-t bg-background/80 backdrop-blur-sm md:hidden z-[9999]">
         <div className="container h-full mx-auto">
           <div className="grid h-full grid-cols-4 items-center justify-items-center">
             <Button variant="ghost" size="icon" asChild>
@@ -70,5 +70,5 @@ export function NavigationBar() {
         </div>
       </nav>
     </>
-  )
+  );
 }
