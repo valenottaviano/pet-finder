@@ -104,6 +104,7 @@ model Pet {
   user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   photos       PetPhoto[]
   scanEvents   ScanEvent[]
+  alertPosts   PetAlertPost[]
 
   @@map("pets")
 }
@@ -118,6 +119,25 @@ model PetPhoto {
   pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
 
   @@map("pet_photos")
+}
+
+model PetAlertPost {
+  id          String          @id @default(cuid())
+  petId       String          @map("pet_id")
+  status      AlertStatus
+  description String?
+  latitude    Float?
+  longitude   Float?
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+  pet         Pet             @relation(fields: [petId], references: [id], onDelete: Cascade)
+
+  @@map("pet_alert_posts")
+}
+
+enum AlertStatus {
+  LOST
+  FOUND
 }
 
 enum PetType {

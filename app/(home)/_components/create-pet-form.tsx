@@ -327,17 +327,16 @@ export const CreatePetForm = () => {
         <FormError message={error} />
         <FormSuccess message={success} />
 
-        <div className="flex gap-4">
+        <div className="grid grid-cols-2 gap-4">
           <Button
             type="button"
             variant="outline"
-            className="w-full"
             onClick={() => router.push("/home")}
             disabled={isPending}
           >
             Cancelar
           </Button>
-          <Button disabled={isPending} type="submit" className="w-full">
+          <Button disabled={isPending} type="submit">
             Crear Mascota
           </Button>
         </div>

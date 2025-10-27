@@ -1,4 +1,5 @@
 import { getUserPetById } from "@/data/pets";
+import { getPetAlerts } from "@/data/pet-alerts";
 import { isValidPetCode } from "@/lib/pet-codes";
 import { notFound } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,7 +11,9 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { CopyLinkButton } from "../../_components/copy-link-button";
 import { QRCodeButton } from "../../_components/qr-code-button";
+import { LostPetButton } from "../../_components/lost-pet-button";
 import { PetScanEvents } from "../../_components/pet-scan-events";
+import { PetAlertsList } from "../../_components/pet-alerts-list";
 
 interface PageProps {
   params: Promise<{
@@ -55,63 +58,34 @@ export default async function PetManagementPage({ params }: PageProps) {
     notFound();
   }
 
+  // Obtener las alertas de la mascota
+  const alerts = await getPetAlerts(petId);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+          <div className="relative flex items-center justify-center">
+            <div className="absolute left-0 lg:hidden">
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/home">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Volver
                 </Link>
               </Button>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">
-                  Gestionar {pet.name}
-                </h1>
-                <div className="flex items-center gap-2 mt-1">
-                  <Badge variant="secondary">{getPetTypeLabel(pet.type)}</Badge>
-                  <span className="text-sm text-gray-500">
-                    Registrado el {formatDate(pet.createdAt)}
-                  </span>
-                </div>
-              </div>
             </div>
-
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" asChild>
-                <Link href={`/p/${pet.id}`} target="_blank">
-                  <Eye className="h-4 w-4 mr-2" />
-                  Ver Perfil Público
-                </Link>
-              </Button>
-            </div>
+            <h1 className="text-2xl font-bold text-gray-900">
+              {pet.name}
+            </h1>
           </div>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Edit Form */}
-          <div className="lg:col-span-2 space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Editar Información</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <EditPetForm pet={pet} />
-              </CardContent>
-            </Card>
-
-            {/* QR Scan Events */}
-            <PetScanEvents petId={pet.id} petName={pet.name} />
-          </div>
-
-          {/* Actions Sidebar */}
-          <div className="space-y-6">
+          {/* Actions Sidebar - Will appear first on mobile */}
+          <div className="space-y-6 order-first lg:order-last">
             {/* Quick Actions */}
             <Card>
               <CardHeader>
@@ -128,6 +102,8 @@ export default async function PetManagementPage({ params }: PageProps) {
                 <CopyLinkButton petId={pet.id} />
 
                 <QRCodeButton petId={pet.id} petName={pet.name} />
+
+                <LostPetButton petId={pet.id} petName={pet.name} />
               </CardContent>
             </Card>
 
@@ -177,6 +153,24 @@ export default async function PetManagementPage({ params }: PageProps) {
                 </div>
               </CardContent>
             </Card>
+          </div>
+
+          {/* Edit Form */}
+          <div className="lg:col-span-2 space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Editar Información</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <EditPetForm pet={pet} />
+              </CardContent>
+            </Card>
+
+            {/* Pet Alerts */}
+            <PetAlertsList alerts={alerts} />
+
+            {/* QR Scan Events */}
+            <PetScanEvents petId={pet.id} petName={pet.name} />
           </div>
         </div>
       </div>

@@ -182,6 +182,15 @@ export const LoginForm = () => {
             <Button type="submit" className="w-full" disabled={isPending}>
               Iniciar Sesión
             </Button>
+
+            <div className="text-center mt-4">
+              <p className="text-sm text-muted-foreground">
+                ¿No tienes una cuenta?{" "}
+                <Link href="/auth/register" className="text-primary hover:underline">
+                  Regístrate aquí
+                </Link>
+              </p>
+            </div>
           </form>
         </Form>
       </div>

@@ -353,17 +353,16 @@ export const EditPetForm = ({ pet }: EditPetFormProps) => {
         <FormError message={error} />
         <FormSuccess message={success} />
 
-        <div className="flex gap-4">
+        <div className="grid grid-cols-2 gap-4">
           <Button
             type="button"
             variant="outline"
-            className="w-full"
             onClick={() => router.back()}
             disabled={isPending}
           >
             Cancelar
           </Button>
-          <Button disabled={isPending} type="submit" className="w-full">
+          <Button disabled={isPending} type="submit">
             Actualizar Mascota
           </Button>
         </div>

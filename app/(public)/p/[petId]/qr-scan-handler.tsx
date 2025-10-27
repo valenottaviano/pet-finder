@@ -69,7 +69,18 @@ export const QRScanHandler = ({ petId, petName }: QRScanHandlerProps) => {
       if (response.ok) {
         const result = await response.json();
         setScanRecorded(true);
-        toast.success("¡Escaneo registrado! El dueño ha sido notificado.");
+
+        // Mensaje personalizado basado en si el email fue enviado
+        const hasLocation = latitude !== 0 && longitude !== 0;
+        const emailMessage = result.emailSent
+          ? "El dueño ha sido notificado por email."
+          : "Escaneo registrado (no se pudo enviar el email).";
+
+        const locationMessage = hasLocation
+          ? " Se compartió la ubicación."
+          : "";
+
+        toast.success(`¡Escaneo registrado! ${emailMessage}${locationMessage}`);
         setIsOpen(false);
       } else {
         const error = await response.json();
@@ -117,8 +128,14 @@ export const QRScanHandler = ({ petId, petName }: QRScanHandlerProps) => {
       });
 
       if (response.ok) {
+        const result = await response.json();
         setScanRecorded(true);
-        toast.success("¡Escaneo registrado!");
+
+        const emailMessage = result.emailSent
+          ? "El dueño ha sido notificado por email."
+          : "Escaneo registrado (no se pudo enviar el email).";
+
+        toast.success(`¡Escaneo registrado! ${emailMessage}`);
         setIsOpen(false);
       } else {
         const error = await response.json();
