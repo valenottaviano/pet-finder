@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
 import { UserRole } from "@prisma/client";
+import Link from "next/link";
 
 import { Card } from "@/components/ui/card";
 import {
@@ -146,6 +147,15 @@ export function RegisterForm({ role }: { role: UserRole }) {
           <Button className="w-full" disabled={isPending} type="submit">
             Crear Cuenta
           </Button>
+
+          <div className="text-center mt-4">
+            <p className="text-sm text-muted-foreground">
+              ¿Ya tienes una cuenta?{" "}
+              <Link href="/auth/login" className="text-primary hover:underline">
+                Inicia sesión aquí
+              </Link>
+            </p>
+          </div>
         </form>
       </Form>
     </Card>
