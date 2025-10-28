@@ -1,12 +1,12 @@
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import { db } from "@/lib/db";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { getUserById, getUserByEmail } from "./data/user";
 import { LoginSchema } from "./schemas";
 
 import authConfig from "./auth.config";
-import { db } from "./lib/db";
 
 export const {
   handlers: { GET, POST },
@@ -20,7 +20,6 @@ export const {
     strategy: "jwt",
   },
   callbacks: {
-    ...authConfig.callbacks,
     async signIn({ user, account, credentials }) {
       // Handle OAuth providers
       if (account?.provider !== "credentials") return true;
