@@ -1,14 +1,12 @@
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { getUserById, getUserByEmail } from "./data/user";
 import { LoginSchema } from "./schemas";
 
 import authConfig from "./auth.config";
-
-const prisma = new PrismaClient();
+import { db } from "./lib/db";
 
 export const {
   handlers: { GET, POST },
@@ -17,7 +15,7 @@ export const {
   signOut,
 } = NextAuth({
   ...authConfig,
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(db),
   session: {
     strategy: "jwt",
   },
