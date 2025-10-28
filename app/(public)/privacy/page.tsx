@@ -283,8 +283,8 @@ export default function PrivacyPage() {
             <p className="text-muted-foreground mb-4">
               Podemos actualizar esta Política de Privacidad periódicamente. Te
               notificaremos sobre cambios significativos publicando la nueva
-              política en esta página y actualizando la fecha de "última
-              actualización". Te recomendamos revisar esta política
+              política en esta página y actualizando la fecha de &ldquo;última
+              actualización&rdquo;. Te recomendamos revisar esta política
               periódicamente.
             </p>
           </section>

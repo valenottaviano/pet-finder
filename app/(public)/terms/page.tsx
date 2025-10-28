@@ -30,9 +30,9 @@ export default function TermsPage() {
             </h2>
             <p className="text-muted-foreground mb-4">
               Bienvenido a PetFinder. Al acceder y utilizar nuestro sitio web,
-              aplicación móvil y servicios (colectivamente, el "Servicio"),
-              aceptas estar legalmente vinculado por estos Términos y
-              Condiciones de Uso ("Términos").
+              aplicación móvil y servicios (colectivamente, el
+              &ldquo;Servicio&rdquo;), aceptas estar legalmente vinculado por
+              estos Términos y Condiciones de Uso (&ldquo;Términos&rdquo;).
             </p>
             <p className="text-muted-foreground mb-4">
               Si no estás de acuerdo con estos Términos, no utilices nuestro
@@ -215,8 +215,8 @@ export default function TermsPage() {
               8. Limitación de Responsabilidad
             </h2>
             <p className="text-muted-foreground mb-4">
-              EL SERVICIO SE PROPORCIONA "TAL CUAL" Y "SEGÚN DISPONIBILIDAD".
-              HASTA EL MÁXIMO PERMITIDO POR LA LEY:
+              EL SERVICIO SE PROPORCIONA &ldquo;TAL CUAL&rdquo; Y &ldquo;SEGÚN
+              DISPONIBILIDAD&rdquo;. HASTA EL MÁXIMO PERMITIDO POR LA LEY:
             </p>
             <ul className="list-disc pl-6 text-muted-foreground mb-4 space-y-2">
               <li>
