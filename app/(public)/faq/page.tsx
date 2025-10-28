@@ -283,8 +283,9 @@ export default function FAQPage() {
                 </summary>
                 <p className="text-muted-foreground mt-4">
                   Puedes restablecer tu contraseña fácilmente desde la página de
-                  inicio de sesión usando la opción "Olvidé mi contraseña".
-                  Recibirás un enlace de recuperación por email.
+                  inicio de sesión usando la opción &ldquo;Olvidé mi
+                  contraseña&rdquo;. Recibirás un enlace de recuperación por
+                  email.
                 </p>
               </details>
             </div>
