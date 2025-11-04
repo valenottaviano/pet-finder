@@ -9,11 +9,15 @@ import {
   Facebook,
   Twitter,
   Instagram,
+  Map,
 } from "lucide-react";
 import { auth } from "@/auth";
+import { getAllLostPetAlerts } from "@/data/pet-alerts";
+import { GlobalLostPetsMapWrapper } from "@/app/(home)/_components/global-lost-pets-map-wrapper";
 
 export default async function HomePage() {
   const session = await auth();
+  const lostPetAlerts = await getAllLostPetAlerts();
 
   return (
     <div className="font-sans min-h-screen flex flex-col">
@@ -172,11 +176,21 @@ export default async function HomePage() {
               encontrada y reunida con su familia.
             </p>
           </div>
-          <div className="w-full h-[600px] bg-background border border-border rounded-xl shadow-inner flex items-center justify-center">
-            {/* Map component will be placed here */}
-            <p className="text-muted-foreground text-lg">
-              Mapa interactivo próximamente...
-            </p>
+          <div className="w-full h-[600px] bg-background border border-border rounded-xl shadow-inner overflow-hidden">
+            <div className="h-full">
+              {lostPetAlerts.length > 0 ? (
+                <GlobalLostPetsMapWrapper alerts={lostPetAlerts} />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="text-center">
+                    <Map className="h-8 w-8 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-muted-foreground text-lg">
+                      No hay mascotas perdidas reportadas en este momento
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
