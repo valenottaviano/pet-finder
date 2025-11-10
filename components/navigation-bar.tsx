@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { MapIcon, PawPrint, HelpCircle, UserCircle2 } from "lucide-react";
+import {
+  MapIcon,
+  PawPrint,
+  HelpCircle,
+  UserCircle2,
+  MessageSquare,
+} from "lucide-react";
 
 export function NavigationBar() {
   return (
@@ -27,6 +33,12 @@ export function NavigationBar() {
               </Link>
             </Button>
             <Button variant="ghost" size="sm" asChild>
+              <Link href="/forum">
+                <MessageSquare className="mr-2" />
+                Foro
+              </Link>
+            </Button>
+            <Button variant="ghost" size="sm" asChild>
               <Link href="/help">
                 <HelpCircle className="mr-2" />
                 Ayuda
@@ -45,7 +57,7 @@ export function NavigationBar() {
       {/* Mobile Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 h-16 border-t bg-background/80 backdrop-blur-sm md:hidden z-[9999]">
         <div className="container h-full mx-auto">
-          <div className="grid h-full grid-cols-4 items-center justify-items-center">
+          <div className="grid h-full grid-cols-5 items-center justify-items-center">
             <Button variant="ghost" size="icon" asChild>
               <Link href="/map">
                 <MapIcon />
@@ -54,6 +66,11 @@ export function NavigationBar() {
             <Button variant="ghost" size="icon" asChild>
               <Link href="/home">
                 <PawPrint />
+              </Link>
+            </Button>
+            <Button variant="ghost" size="icon" asChild>
+              <Link href="/forum">
+                <MessageSquare />
               </Link>
             </Button>
             <Button variant="ghost" size="icon" asChild>

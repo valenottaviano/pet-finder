@@ -72,3 +72,87 @@ export const getAllLostPetAlerts = async () => {
     return [];
   }
 };
+
+export const getForumPosts = async () => {
+  try {
+    const posts = await db.petAlertPost.findMany({
+      include: {
+        pet: {
+          include: {
+            photos: {
+              where: {
+                isPrimary: true,
+              },
+              take: 1,
+            },
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
+        _count: {
+          select: {
+            comments: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return posts;
+  } catch (error) {
+    console.error("Error fetching forum posts:", error);
+    return [];
+  }
+};
+
+export const getPostWithComments = async (postId: string) => {
+  try {
+    const post = await db.petAlertPost.findUnique({
+      where: {
+        id: postId,
+      },
+      include: {
+        pet: {
+          include: {
+            photos: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                image: true,
+              },
+            },
+          },
+        },
+        comments: {
+          include: {
+            author: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                image: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
+      },
+    });
+
+    return post;
+  } catch (error) {
+    console.error("Error fetching post with comments:", error);
+    return null;
+  }
+};

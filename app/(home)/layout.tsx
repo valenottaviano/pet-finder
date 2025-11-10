@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { NavigationBar } from "@/components/navigation-bar";
+import { AuthProvider } from "@/components/auth-provider";
 import { redirect } from "next/navigation";
 
 export default async function HomeLayout({
@@ -14,11 +15,11 @@ export default async function HomeLayout({
   }
 
   return (
-    <>
+    <AuthProvider session={session}>
       <NavigationBar />
       <main className="container mx-auto md:pt-20 pb-20 min-h-screen">
         {children}
       </main>
-    </>
+    </AuthProvider>
   );
 }

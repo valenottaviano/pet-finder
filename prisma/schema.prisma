@@ -22,6 +22,7 @@ model User {
   passwordResetTokens  PasswordResetToken[]
   emailChangeTokens    EmailChangeToken[]
   pets                 Pet[]
+  comments             Comment[]
 
   @@map("users")
 }
@@ -131,6 +132,7 @@ model PetAlertPost {
   createdAt   DateTime        @default(now()) @map("created_at")
   updatedAt   DateTime        @updatedAt @map("updated_at")
   pet         Pet             @relation(fields: [petId], references: [id], onDelete: Cascade)
+  comments    Comment[]
 
   @@map("pet_alert_posts")
 }
@@ -185,4 +187,21 @@ model ScanEvent {
   @@index([petId])
   @@index([createdAt])
   @@map("scan_events")
+}
+
+model Comment {
+  id        String       @id @default(cuid())
+  content   String
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+  
+  // Relación con el post
+  postId    String       @map("post_id")
+  post      PetAlertPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  // Relación con el usuario que comenta
+  authorId  String       @map("author_id")
+  author    User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
 }
