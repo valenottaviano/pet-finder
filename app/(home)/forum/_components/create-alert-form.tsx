@@ -121,9 +121,9 @@ export const CreateAlertForm = ({ pets }: CreateAlertFormProps) => {
         toast.success(res.success || "Alerta creada");
         // Redirect to the new post in the forum if available
         if (res.alertId) {
-          router.push(`/home/forum/${res.alertId}`);
+          router.push(`/forum/${res.alertId}`);
         } else {
-          router.push(`/home/forum`);
+          router.push(`/forum`);
         }
       } catch (err) {
         console.error(err);

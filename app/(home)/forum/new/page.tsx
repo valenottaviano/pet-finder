@@ -69,7 +69,7 @@ export default async function NewForumAlertPage() {
       <div className="max-w-2xl mx-auto">
         <div className="mb-6">
           <Button variant="ghost" asChild>
-            <Link href="/home/forum">
+            <Link href="/forum">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Volver al foro
             </Link>
