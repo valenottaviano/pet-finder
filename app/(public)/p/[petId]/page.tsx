@@ -163,23 +163,6 @@ export default async function PublicPetPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <Link
-              href="/"
-              className="text-primary hover:text-primary/80 font-semibold"
-            >
-              Pet Finder
-            </Link>
-            <Badge variant="secondary" className="text-sm">
-              Perfil Público
-            </Badge>
-          </div>
-        </div>
-      </div>
-
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Images Section */}
