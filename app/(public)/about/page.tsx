@@ -13,8 +13,9 @@ export default function AboutPage() {
             Sobre PetFinder
           </h1>
           <p className="text-xl text-primary-foreground/90">
-            Nuestra misión es mantener a las mascotas seguras y reunir a las
-            familias con sus compañeros perdidos.
+            Proyecto de tesis de Ingeniería en Informática que busca
+            revolucionar la forma en que protegemos a nuestras mascotas mediante
+            tecnología QR.
           </p>
         </div>
       </div>
@@ -25,22 +26,25 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl font-bold text-foreground mb-6">
-                Nuestra Historia
+                El Proyecto
               </h2>
               <p className="text-muted-foreground mb-4">
-                PetFinder nació de una experiencia personal. En 2023, cuando
-                nuestra fundadora perdió a su perro Max durante 3 días
-                angustiosos, se dio cuenta de que debía haber una mejor manera
-                de proteger a nuestras mascotas.
+                PetFinder es un proyecto de tesis de la carrera de Ingeniería en
+                Informática desarrollado por Valentín Ottaviano. Este trabajo
+                académico propone una solución innovadora al problema de las
+                mascotas perdidas mediante el uso de códigos QR y tecnología web
+                moderna.
               </p>
               <p className="text-gray-600 mb-4">
-                Así comenzó nuestra misión: crear un sistema simple pero
-                poderoso que use tecnología QR para conectar instantáneamente a
-                las mascotas perdidas con sus dueños.
+                El objetivo principal es demostrar cómo las tecnologías actuales
+                pueden aplicarse para resolver problemas reales de la comunidad,
+                creando un sistema accesible, fácil de usar y efectivo que
+                conecte instantáneamente a las mascotas perdidas con sus dueños.
               </p>
               <p className="text-gray-600">
-                Hoy, miles de mascotas están protegidas con PetFinder, y
-                seguimos creciendo cada día.
+                Este proyecto combina conceptos de desarrollo web full-stack,
+                bases de datos, geolocalización y notificaciones en tiempo real
+                para crear una plataforma integral de protección de mascotas.
               </p>
             </div>
             <div className="relative h-[400px] rounded-2xl overflow-hidden">
@@ -59,38 +63,37 @@ export default function AboutPage() {
       <div className="bg-muted py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold text-foreground text-center mb-12">
-            Nuestros Valores
+            Objetivos del Proyecto
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-full mb-4">
                 <Heart className="h-8 w-8 text-primary-foreground" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">
-                Amor por las Mascotas
-              </h3>
+              <h3 className="text-xl font-semibold mb-2">Solución Real</h3>
               <p className="text-muted-foreground">
-                Las mascotas son familia. Tratamos cada caso con el cuidado que
-                merece.
+                Abordar un problema real de la comunidad con tecnología
+                accesible y efectiva.
               </p>
             </div>
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-full mb-4">
                 <Shield className="h-8 w-8 text-primary-foreground" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Seguridad</h3>
+              <h3 className="text-xl font-semibold mb-2">Tecnología Moderna</h3>
               <p className="text-muted-foreground">
-                Protegemos la privacidad de nuestros usuarios con tecnología de
-                vanguardia.
+                Implementar las mejores prácticas de desarrollo web y seguridad
+                de datos.
               </p>
             </div>
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-full mb-4">
                 <Users className="h-8 w-8 text-primary-foreground" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Comunidad</h3>
+              <h3 className="text-xl font-semibold mb-2">Accesibilidad</h3>
               <p className="text-muted-foreground">
-                Creemos en el poder de la comunidad para ayudarse mutuamente.
+                Crear una plataforma intuitiva que cualquier persona pueda usar
+                sin dificultad.
               </p>
             </div>
             <div className="text-center">
@@ -99,37 +102,40 @@ export default function AboutPage() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Innovación</h3>
               <p className="text-muted-foreground">
-                Mejoramos constantemente para ofrecer el mejor servicio posible.
+                Demostrar cómo la tecnología puede mejorar la vida de las
+                personas y sus mascotas.
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Stats Section */}
+      {/* Tech Stack Section */}
       <div className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold text-foreground text-center mb-12">
-            Nuestro Impacto
+            Tecnologías Utilizadas
           </h2>
           <div className="grid md:grid-cols-3 gap-8 text-center">
             <div>
               <div className="text-5xl font-bold text-primary mb-2">
-                10,000+
+                Next.js
               </div>
               <div className="text-xl text-muted-foreground">
-                Mascotas Registradas
+                Framework Full-Stack
               </div>
             </div>
             <div>
-              <div className="text-5xl font-bold text-primary mb-2">5,000+</div>
+              <div className="text-5xl font-bold text-primary mb-2">Prisma</div>
               <div className="text-xl text-muted-foreground">
-                Reuniones Exitosas
+                ORM y Base de Datos
               </div>
             </div>
             <div>
-              <div className="text-5xl font-bold text-primary mb-2">50+</div>
-              <div className="text-xl text-muted-foreground">Ciudades</div>
+              <div className="text-5xl font-bold text-primary mb-2">QR</div>
+              <div className="text-xl text-muted-foreground">
+                Códigos de Identificación
+              </div>
             </div>
           </div>
         </div>
@@ -138,14 +144,16 @@ export default function AboutPage() {
       {/* CTA Section */}
       <div className="bg-foreground text-background py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6">Únete a Nuestra Misión</h2>
+          <h2 className="text-3xl font-bold mb-6">
+            Proyecto Académico en Desarrollo
+          </h2>
           <p className="text-xl mb-8 text-background/90">
-            Ayúdanos a crear un mundo donde ninguna mascota se pierda para
-            siempre.
+            Este proyecto de tesis está en constante evolución. Probá la
+            plataforma y ayudanos a mejorarla con tu feedback.
           </p>
           <Link href="/auth/register">
             <Button className="bg-primary text-primary-foreground text-lg px-8 py-3 rounded-full hover:bg-primary/90">
-              Comenzar Ahora
+              Probar la Plataforma
             </Button>
           </Link>
         </div>

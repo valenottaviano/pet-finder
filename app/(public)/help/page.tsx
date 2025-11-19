@@ -19,7 +19,7 @@ export default function HelpPage() {
             Centro de Ayuda
           </h1>
           <p className="text-xl text-foreground">
-            Estamos aquí para ayudarte en cada paso del camino
+            Documentación y guías de uso del proyecto PetFinder
           </p>
         </div>
       </div>
@@ -222,11 +222,12 @@ export default function HelpPage() {
             ¿No Encontraste lo que Buscabas?
           </h2>
           <p className="text-xl mb-8">
-            Nuestro equipo de soporte está listo para ayudarte.
+            Este es un proyecto académico en desarrollo. Tu feedback es muy
+            valioso para mejorar la plataforma.
           </p>
           <Link href="/contact">
             <Button className="bg-primary text-foreground text-lg px-8 py-3 rounded-full hover:bg-primary/90">
-              Contactar Soporte
+              Enviar Feedback
             </Button>
           </Link>
         </div>

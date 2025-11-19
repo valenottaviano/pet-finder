@@ -12,7 +12,7 @@ export default function PricingPage() {
             Planes y Precios
           </h1>
           <p className="text-xl text-primary-foreground/90">
-            Elige el plan perfecto para proteger a tu mascota
+            Propuesta de modelo de negocio para el proyecto de tesis
           </p>
         </div>
       </div>
@@ -258,13 +258,17 @@ export default function PricingPage() {
       {/* CTA Section */}
       <div className="bg-foreground text-background py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6">¿Tienes Preguntas?</h2>
+          <h2 className="text-3xl font-bold mb-6">
+            Modelo de Negocio Propuesto
+          </h2>
           <p className="text-xl mb-8">
-            Nuestro equipo está aquí para ayudarte a elegir el plan perfecto.
+            Esta estructura de precios forma parte del análisis de viabilidad
+            comercial del proyecto de tesis. Actualmente, todas las funciones
+            están disponibles gratuitamente para pruebas.
           </p>
           <Link href="/contact">
             <Button className="bg-primary text-foreground text-lg px-8 py-3 rounded-full hover:bg-primary/90">
-              Contactar Soporte
+              Más Información
             </Button>
           </Link>
         </div>

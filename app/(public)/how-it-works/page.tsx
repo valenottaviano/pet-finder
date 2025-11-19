@@ -12,7 +12,8 @@ export default function HowItWorksPage() {
             ¿Cómo Funciona PetFinder?
           </h1>
           <p className="text-xl text-primary-foreground/90">
-            Un sistema simple de 3 pasos para mantener a tu mascota segura
+            Sistema basado en códigos QR para identificación y recuperación de
+            mascotas
           </p>
         </div>
       </div>
@@ -193,15 +194,14 @@ export default function HowItWorksPage() {
       {/* CTA Section */}
       <div className="bg-foreground text-background py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6">
-            ¿Listo para Proteger a Tu Mascota?
-          </h2>
+          <h2 className="text-3xl font-bold mb-6">Probá el Sistema</h2>
           <p className="text-xl mb-8 text-background/90">
-            Comienza en minutos y mantén a tu mejor amigo seguro.
+            Este proyecto de tesis está disponible para que lo pruebes. Registrá
+            tu mascota y experimentá cómo funciona la tecnología QR.
           </p>
           <Link href="/auth/register">
             <Button className="bg-primary text-primary-foreground text-lg px-8 py-3 rounded-full hover:bg-primary/90">
-              Registrar Mi Mascota
+              Comenzar Prueba
             </Button>
           </Link>
         </div>
