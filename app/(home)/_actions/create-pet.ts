@@ -3,11 +3,14 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { CreatePetSchema } from "@/schemas";
-import { generateUniquePetCode } from "@/lib/pet-codes";
+import { generateUniquePetCode, isValidPetCode } from "@/lib/pet-codes";
 import { redirect } from "next/navigation";
 import * as z from "zod";
 
-export const createPet = async (values: z.infer<typeof CreatePetSchema>) => {
+export const createPet = async (
+  values: z.infer<typeof CreatePetSchema>,
+  existingCode?: string
+) => {
   const session = await auth();
 
   console.log("Session data:", {
@@ -71,40 +74,83 @@ export const createPet = async (values: z.infer<typeof CreatePetSchema>) => {
   }
 
   try {
-    // Generate unique pet code with retry logic
     let petId: string;
-    let retries = 0;
-    const maxRetries = 3;
 
-    do {
-      petId = await generateUniquePetCode();
-      retries++;
-
-      // Double-check that the code is still available (race condition protection)
-      const codeStillAvailable = await db.pet.findUnique({
-        where: { id: petId },
-        select: { id: true },
-      });
-
-      if (!codeStillAvailable) {
-        console.log(`Pet code ${petId} confirmed as available`);
-        break;
+    // If an existing code is provided, use it (from generic QR code claim)
+    if (existingCode) {
+      if (!isValidPetCode(existingCode)) {
+        return { error: "Código proporcionado inválido" };
       }
 
-      if (retries >= maxRetries) {
-        console.error(
-          `Failed to generate unique pet code after ${maxRetries} retries`
-        );
+      // Verify the generic code exists and is claimed by this user
+      const genericCode = await db.genericQRCode.findUnique({
+        where: { id: existingCode },
+      });
+
+      if (!genericCode) {
+        return { error: "Código genérico no encontrado" };
+      }
+
+      if (!genericCode.claimed) {
         return {
-          error:
-            "Error generando código único para la mascota. Intenta nuevamente.",
+          error: "Este código debe ser reclamado antes de crear la mascota",
         };
       }
 
-      console.warn(
-        `Pet code ${petId} was taken between generation and verification, retrying...`
-      );
-    } while (retries < maxRetries);
+      if (genericCode.claimedByUserId !== session.user.id) {
+        return {
+          error: "Este código fue reclamado por otro usuario",
+        };
+      }
+
+      // Check if pet already exists with this code
+      const existingPet = await db.pet.findUnique({
+        where: { id: existingCode },
+      });
+
+      if (existingPet) {
+        return {
+          error: "Ya existe una mascota con este código",
+        };
+      }
+
+      petId = existingCode;
+      console.log(`Using claimed generic code: ${petId}`);
+    } else {
+      // Generate unique pet code with retry logic
+      let retries = 0;
+      const maxRetries = 3;
+
+      do {
+        petId = await generateUniquePetCode();
+        retries++;
+
+        // Double-check that the code is still available (race condition protection)
+        const codeStillAvailable = await db.pet.findUnique({
+          where: { id: petId },
+          select: { id: true },
+        });
+
+        if (!codeStillAvailable) {
+          console.log(`Pet code ${petId} confirmed as available`);
+          break;
+        }
+
+        if (retries >= maxRetries) {
+          console.error(
+            `Failed to generate unique pet code after ${maxRetries} retries`
+          );
+          return {
+            error:
+              "Error generando código único para la mascota. Intenta nuevamente.",
+          };
+        }
+
+        console.warn(
+          `Pet code ${petId} was taken between generation and verification, retrying...`
+        );
+      } while (retries < maxRetries);
+    }
 
     console.log(`Creating pet with ID: ${petId}`);
 

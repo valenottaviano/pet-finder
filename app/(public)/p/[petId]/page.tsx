@@ -1,5 +1,5 @@
 import { getPetById } from "@/data/pets";
-import { isValidPetCode } from "@/lib/pet-codes";
+import { isValidPetCode, isGenericQRCode } from "@/lib/pet-codes";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Metadata } from "next";
 import { QRScanHandler } from "./qr-scan-handler";
+import { GenericQRCodeClaim } from "./generic-qr-claim";
 
 interface PageProps {
   params: Promise<{
@@ -149,6 +150,14 @@ export default async function PublicPetPage({ params }: PageProps) {
   // Validate pet code format - if it doesn't match, it's likely an old CUID
   if (!isValidPetCode(petId)) {
     notFound();
+  }
+
+  // Check if this is an unclaimed generic QR code
+  const isGeneric = await isGenericQRCode(petId);
+
+  if (isGeneric) {
+    // Show claim page for generic QR codes
+    return <GenericQRCodeClaim code={petId} />;
   }
 
   const pet = await getPetById(petId);

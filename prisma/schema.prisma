@@ -205,3 +205,14 @@ model Comment {
 
   @@map("comments")
 }
+
+model GenericQRCode {
+  id              String   @id // 8-character pet code
+  claimed         Boolean  @default(false)
+  claimedAt       DateTime? @map("claimed_at")
+  claimedByUserId String?  @map("claimed_by_user_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@index([claimed])
+  @@map("generic_qr_codes")
+}

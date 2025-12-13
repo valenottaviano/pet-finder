@@ -29,7 +29,11 @@ import { createPet } from "../_actions/create-pet";
 import { useRouter } from "next/navigation";
 import { PetImageUpload } from "./pet-image-upload";
 
-export const CreatePetForm = () => {
+interface CreatePetFormProps {
+  existingCode?: string;
+}
+
+export const CreatePetForm = ({ existingCode }: CreatePetFormProps) => {
   const router = useRouter();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
@@ -58,15 +62,17 @@ export const CreatePetForm = () => {
     console.log("Form values being submitted:", values);
 
     startTransition(() => {
-      createPet(values).then((data) => {
+      createPet(values, existingCode).then((data) => {
         console.log("Server response:", data);
-        setError(data.error);
-        setSuccess(data.success);
+        if (data) {
+          setError(data.error);
+          setSuccess(data.success);
 
-        if (data.success) {
-          setTimeout(() => {
-            router.push("/home");
-          }, 1500);
+          if (data.success) {
+            setTimeout(() => {
+              router.push("/home");
+            }, 1500);
+          }
         }
       });
     });

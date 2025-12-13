@@ -122,3 +122,144 @@ export async function getPetCodeStats() {
     return null;
   }
 }
+
+/**
+ * Generates a batch of unique generic QR codes
+ * @param quantity - Number of codes to generate
+ * @returns Array of generated codes or null if failed
+ */
+export async function generateBatchGenericQRCodes(
+  quantity: number
+): Promise<string[] | null> {
+  if (quantity <= 0 || quantity > 10000) {
+    console.error("Quantity must be between 1 and 10000");
+    return null;
+  }
+
+  const chars = "ABCDEFGHIJKLMNPQRSTUVWXYZ23456789";
+  const codeLength = 8;
+  const generatedCodes: string[] = [];
+  const maxAttemptsPerCode = 100;
+
+  console.log(`Starting batch generation of ${quantity} generic QR codes...`);
+
+  for (let i = 0; i < quantity; i++) {
+    let attempts = 0;
+    let codeGenerated = false;
+
+    while (attempts < maxAttemptsPerCode && !codeGenerated) {
+      let code = "";
+
+      // Generate random code
+      for (let j = 0; j < codeLength; j++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+
+      try {
+        // Check if code already exists in Pet table or GenericQRCode table
+        const [existingPet, existingQRCode] = await Promise.all([
+          db.pet.findUnique({
+            where: { id: code },
+            select: { id: true },
+          }),
+          db.genericQRCode.findUnique({
+            where: { id: code },
+            select: { id: true },
+          }),
+        ]);
+
+        if (!existingPet && !existingQRCode) {
+          // Code is unique, add to generated list
+          generatedCodes.push(code);
+          codeGenerated = true;
+
+          if ((i + 1) % 100 === 0) {
+            console.log(`Generated ${i + 1}/${quantity} codes...`);
+          }
+        }
+      } catch (error) {
+        console.error(
+          `Error checking code uniqueness for code ${code}:`,
+          error
+        );
+      }
+
+      attempts++;
+    }
+
+    if (!codeGenerated) {
+      console.error(
+        `Failed to generate unique code after ${maxAttemptsPerCode} attempts at position ${
+          i + 1
+        }`
+      );
+      return null;
+    }
+  }
+
+  // Insert all codes into database in a transaction
+  try {
+    console.log(`Inserting ${generatedCodes.length} codes into database...`);
+
+    await db.$transaction(
+      generatedCodes.map((code) =>
+        db.genericQRCode.create({
+          data: { id: code },
+        })
+      )
+    );
+
+    console.log(
+      `✓ Successfully generated and saved ${generatedCodes.length} generic QR codes`
+    );
+    return generatedCodes;
+  } catch (error) {
+    console.error("Error inserting generic QR codes:", error);
+    return null;
+  }
+}
+
+/**
+ * Checks if a code is a generic (unclaimed) QR code
+ */
+export async function isGenericQRCode(code: string): Promise<boolean> {
+  if (!isValidPetCode(code)) {
+    return false;
+  }
+
+  try {
+    const genericCode = await db.genericQRCode.findUnique({
+      where: { id: code },
+      select: { claimed: true },
+    });
+
+    return genericCode !== null && !genericCode.claimed;
+  } catch (error) {
+    console.error("Error checking if code is generic QR code:", error);
+    return false;
+  }
+}
+
+/**
+ * Gets statistics about generic QR codes
+ */
+export async function getGenericQRCodeStats() {
+  try {
+    const [total, claimed, unclaimed] = await Promise.all([
+      db.genericQRCode.count(),
+      db.genericQRCode.count({ where: { claimed: true } }),
+      db.genericQRCode.count({ where: { claimed: false } }),
+    ]);
+
+    return {
+      total,
+      claimed,
+      unclaimed,
+      claimedPercentage:
+        total > 0 ? Number(((claimed / total) * 100).toFixed(2)) : 0,
+    };
+  } catch (error) {
+    console.error("Error getting generic QR code statistics:", error);
+    return null;
+  }
+}
