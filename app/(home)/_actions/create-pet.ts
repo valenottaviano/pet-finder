@@ -76,46 +76,53 @@ export const createPet = async (
   try {
     let petId: string;
 
-    // If an existing code is provided, use it (from generic QR code claim)
+    // If an existing code is provided, use it (from generic QR code)
     if (existingCode) {
       if (!isValidPetCode(existingCode)) {
         return { error: "Código proporcionado inválido" };
       }
 
-      // Verify the generic code exists and is claimed by this user
+      // Check if the code is a generic QR code
       const genericCode = await db.genericQRCode.findUnique({
         where: { id: existingCode },
       });
 
-      if (!genericCode) {
-        return { error: "Código genérico no encontrado" };
+      if (genericCode) {
+        // It's a generic code - verify it's available
+        if (genericCode.claimed) {
+          return {
+            error: "Este código ya fue reclamado por otro usuario",
+          };
+        }
+
+        // Check if pet already exists with this code (shouldn't happen)
+        const existingPet = await db.pet.findUnique({
+          where: { id: existingCode },
+        });
+
+        if (existingPet) {
+          return {
+            error: "Ya existe una mascota con este código",
+          };
+        }
+
+        petId = existingCode;
+        console.log(`Using generic code: ${petId}`);
+      } else {
+        // Not a generic code - check if it's already used
+        const existingPet = await db.pet.findUnique({
+          where: { id: existingCode },
+        });
+
+        if (existingPet) {
+          return {
+            error: "Este código ya está en uso",
+          };
+        }
+
+        petId = existingCode;
+        console.log(`Using provided code: ${petId}`);
       }
-
-      if (!genericCode.claimed) {
-        return {
-          error: "Este código debe ser reclamado antes de crear la mascota",
-        };
-      }
-
-      if (genericCode.claimedByUserId !== session.user.id) {
-        return {
-          error: "Este código fue reclamado por otro usuario",
-        };
-      }
-
-      // Check if pet already exists with this code
-      const existingPet = await db.pet.findUnique({
-        where: { id: existingCode },
-      });
-
-      if (existingPet) {
-        return {
-          error: "Ya existe una mascota con este código",
-        };
-      }
-
-      petId = existingCode;
-      console.log(`Using claimed generic code: ${petId}`);
     } else {
       // Generate unique pet code with retry logic
       let retries = 0;
@@ -154,6 +161,14 @@ export const createPet = async (
 
     console.log(`Creating pet with ID: ${petId}`);
 
+    // Check if this is a generic code that needs to be claimed
+    const isGenericCode = existingCode
+      ? await db.genericQRCode.findUnique({
+          where: { id: existingCode },
+          select: { id: true, claimed: true },
+        })
+      : null;
+
     const pet = await db.pet.create({
       data: {
         id: petId, // Use our generated code
@@ -179,6 +194,19 @@ export const createPet = async (
             : undefined,
       },
     });
+
+    // If it was a generic code, mark it as claimed now
+    if (isGenericCode && !isGenericCode.claimed) {
+      await db.genericQRCode.update({
+        where: { id: petId },
+        data: {
+          claimed: true,
+          claimedAt: new Date(),
+          claimedByUserId: session.user.id,
+        },
+      });
+      console.log(`Generic code ${petId} marked as claimed`);
+    }
 
     console.log("Pet created successfully with ID:", petId);
     return {

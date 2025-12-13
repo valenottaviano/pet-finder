@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { claimGenericCode } from "../_actions/claim-generic-code";
+import { isValidPetCode } from "@/lib/pet-codes";
 
 interface PageProps {
   searchParams: Promise<{
@@ -28,11 +28,8 @@ export default async function NewPetPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const genericCode = params.code;
 
-  // If a generic code is provided, claim it automatically
-  let claimResult = null;
-  if (genericCode) {
-    claimResult = await claimGenericCode(genericCode);
-  }
+  // Validate the code format if provided
+  const isCodeValid = genericCode ? isValidPetCode(genericCode) : false;
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -46,20 +43,26 @@ export default async function NewPetPage({ searchParams }: PageProps) {
           </Link>
         </div>
 
-        {genericCode && claimResult && (
+        {genericCode && isCodeValid && (
           <Alert className="mb-6">
             <Info className="h-4 w-4" />
             <AlertDescription>
-              {claimResult.success ? (
-                <span className="text-green-700">
-                  ✓ Código{" "}
-                  <span className="font-mono font-bold">{genericCode}</span>{" "}
-                  reclamado exitosamente. Completa el formulario para asignarlo
-                  a tu mascota.
-                </span>
-              ) : (
-                <span className="text-red-700">✗ {claimResult.error}</span>
-              )}
+              <span className="text-blue-700">
+                📋 Asignando código QR{" "}
+                <span className="font-mono font-bold">{genericCode}</span> a tu
+                mascota.
+              </span>
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {genericCode && !isCodeValid && (
+          <Alert className="mb-6">
+            <Info className="h-4 w-4" />
+            <AlertDescription>
+              <span className="text-red-700">
+                ✗ El código proporcionado no es válido.
+              </span>
             </AlertDescription>
           </Alert>
         )}
@@ -76,7 +79,7 @@ export default async function NewPetPage({ searchParams }: PageProps) {
           </CardHeader>
           <CardContent>
             <CreatePetForm
-              existingCode={claimResult?.success ? genericCode : undefined}
+              existingCode={isCodeValid ? genericCode : undefined}
             />
           </CardContent>
         </Card>
