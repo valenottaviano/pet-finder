@@ -9,7 +9,11 @@ import {
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
 
-export const verifyEmail = async (email: string, token: string) => {
+export const verifyEmail = async (
+  email: string,
+  token: string,
+  callbackUrl?: string
+) => {
   const existingToken = await getVerificationTokenByToken(token);
 
   if (!existingToken) {
@@ -43,9 +47,14 @@ export const verifyEmail = async (email: string, token: string) => {
   // Delete the verification token
   await deleteVerificationToken(existingToken.id);
 
+  // Use callbackUrl if provided, otherwise default to login
+  const redirectTo = callbackUrl
+    ? `/auth/login?callbackUrl=${encodeURIComponent(callbackUrl)}`
+    : "/auth/login";
+
   return {
     success: "¡Email verificado exitosamente!",
-    redirectTo: "/auth/login",
+    redirectTo,
   };
 };
 

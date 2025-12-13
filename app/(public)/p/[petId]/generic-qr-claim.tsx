@@ -14,6 +14,9 @@ export function GenericQRCodeClaim({ code }: GenericQRCodeClaimProps) {
   const searchParams = useSearchParams();
   const isQRScan = searchParams.get("s") === "1";
 
+  // Properly encode the callback URL to preserve query parameters
+  const callbackUrl = encodeURIComponent(`/new?code=${code}`);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center px-4">
       <Card className="max-w-2xl w-full shadow-xl">
@@ -77,7 +80,7 @@ export function GenericQRCodeClaim({ code }: GenericQRCodeClaimProps) {
               className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white text-lg py-6"
               asChild
             >
-              <Link href={`/auth/login?callbackUrl=/home/new?code=${code}`}>
+              <Link href={`/auth/login?callbackUrl=${callbackUrl}`}>
                 Iniciar Sesión y Reclamar Código
               </Link>
             </Button>
@@ -87,7 +90,7 @@ export function GenericQRCodeClaim({ code }: GenericQRCodeClaimProps) {
               className="w-full text-gray-700 border-gray-300 hover:bg-gray-50 py-6"
               asChild
             >
-              <Link href={`/auth/register?callbackUrl=/home/new?code=${code}`}>
+              <Link href={`/auth/register?callbackUrl=${callbackUrl}`}>
                 Crear Cuenta Nueva
               </Link>
             </Button>

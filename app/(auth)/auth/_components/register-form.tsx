@@ -32,10 +32,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { RegisterSchema } from "@/schemas";
 import { register } from "../_actions/register";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export function RegisterForm({ role }: { role: UserRole }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
+
   const [isPending, startTransition] = useTransition();
   const [formError, setFormError] = useState<string | undefined>("");
   const [formSuccess, setFormSuccess] = useState<string | undefined>("");
@@ -55,7 +58,7 @@ export function RegisterForm({ role }: { role: UserRole }) {
     setFormSuccess("");
 
     startTransition(() => {
-      register(values, role)
+      register(values, role, callbackUrl || undefined)
         .then((response: any) => {
           if (response?.error) {
             form.reset();

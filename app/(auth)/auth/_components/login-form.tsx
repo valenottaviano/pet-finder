@@ -21,13 +21,16 @@ import { use, useState, useTransition } from "react";
 import { FormError } from "./form-error";
 import { login } from "../_actions/login";
 import { FormSuccess } from "./form-success";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import Link from "next/link";
 import { resendVerificationCode } from "../_actions/verify-email";
 
 export const LoginForm = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || DEFAULT_LOGIN_REDIRECT;
+
   const [isPending, startTransition] = useTransition();
   const [formError, setFormError] = useState<string | undefined>("");
   const [formSuccess, setFormSuccess] = useState<string | undefined>("");
@@ -63,7 +66,7 @@ export const LoginForm = () => {
 
           if (response?.success) {
             form.reset();
-            router.push(DEFAULT_LOGIN_REDIRECT);
+            router.push(callbackUrl);
           }
         })
         .catch((error: any) => {
@@ -186,7 +189,16 @@ export const LoginForm = () => {
             <div className="text-center mt-4">
               <p className="text-sm text-muted-foreground">
                 ¿No tienes una cuenta?{" "}
-                <Link href="/auth/register" className="text-primary hover:underline">
+                <Link
+                  href={
+                    callbackUrl !== DEFAULT_LOGIN_REDIRECT
+                      ? `/auth/register?callbackUrl=${encodeURIComponent(
+                          callbackUrl
+                        )}`
+                      : "/auth/register"
+                  }
+                  className="text-primary hover:underline"
+                >
                   Regístrate aquí
                 </Link>
               </p>

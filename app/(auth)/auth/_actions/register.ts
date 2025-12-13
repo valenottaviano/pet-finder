@@ -13,7 +13,8 @@ import { sendVerificationEmail } from "@/lib/mail";
 
 export const register = async (
   values: z.infer<typeof RegisterSchema>,
-  role: UserRole
+  role: UserRole,
+  callbackUrl?: string
 ) => {
   const validatedFields = RegisterSchema.safeParse(values);
   if (!validatedFields.success) return { error: "Campos inválidos" };
@@ -50,13 +51,20 @@ export const register = async (
   // Send verification email
   const emailResult = await sendVerificationEmail(email, token, name);
 
+  // Build verification redirect URL with callbackUrl if provided
+  const verifyUrl = callbackUrl
+    ? `/auth/verify-email?email=${encodeURIComponent(
+        email
+      )}&callbackUrl=${encodeURIComponent(callbackUrl)}`
+    : `/auth/verify-email?email=${encodeURIComponent(email)}`;
+
   if (!emailResult.success) {
     // If email fails, we should still allow the user to proceed but show a warning
     return {
       success:
         "¡Cuenta creada! Por favor revisa tu email para el código de verificación. Si no lo recibes, usa la opción de reenvío.",
       data: newUser.id,
-      redirectTo: `/auth/verify-email?email=${encodeURIComponent(email)}`,
+      redirectTo: verifyUrl,
     };
   }
 
@@ -66,6 +74,6 @@ export const register = async (
     success:
       "¡Cuenta creada exitosamente! Por favor revisa tu email para el código de verificación.",
     data: newUser.id,
-    redirectTo: `/auth/verify-email?email=${encodeURIComponent(email)}`,
+    redirectTo: verifyUrl,
   };
 };

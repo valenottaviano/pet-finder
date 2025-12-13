@@ -17,6 +17,7 @@ export function VerifyEmailForm() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
   const tokenFromUrl = searchParams.get("token") || "";
+  const callbackUrl = searchParams.get("callbackUrl");
 
   const [otp, setOtp] = useState(tokenFromUrl);
   const [error, setError] = useState<string | undefined>("");
@@ -35,7 +36,7 @@ export function VerifyEmailForm() {
     setSuccess("");
 
     startTransition(() => {
-      verifyEmail(email, otp).then((data) => {
+      verifyEmail(email, otp, callbackUrl || undefined).then((data) => {
         setError(data?.error);
         setSuccess(data?.success);
 
