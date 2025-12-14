@@ -20,12 +20,12 @@ export function NavigationBar() {
             PetFinder
           </Link>
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" asChild>
+            {/* <Button variant="ghost" size="sm" asChild>
               <Link href="/map">
                 <MapIcon className="mr-2" />
                 Mapa
               </Link>
-            </Button>
+            </Button> */}
             <Button variant="ghost" size="sm" asChild>
               <Link href="/home">
                 <PawPrint className="mr-2" />
@@ -58,11 +58,11 @@ export function NavigationBar() {
       <nav className="fixed bottom-0 left-0 right-0 h-16 border-t bg-background/80 backdrop-blur-sm md:hidden z-[9999]">
         <div className="container h-full mx-auto">
           <div className="grid h-full grid-cols-5 items-center justify-items-center">
-            <Button variant="ghost" size="icon" asChild>
+            {/* <Button variant="ghost" size="icon" asChild>
               <Link href="/map">
                 <MapIcon />
               </Link>
-            </Button>
+            </Button> */}
             <Button variant="ghost" size="icon" asChild>
               <Link href="/home">
                 <PawPrint />
