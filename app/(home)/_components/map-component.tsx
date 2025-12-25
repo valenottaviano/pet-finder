@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 import { Calendar, Smartphone, MapPin } from "lucide-react";
@@ -93,6 +93,9 @@ export const MapComponent = ({ scanEvents }: MapComponentProps) => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      
+      <BoundsUpdater events={validScanEvents} />
+
       {validScanEvents.map((event) => (
         <Marker key={event.id} position={[event.latitude, event.longitude]}>
           <Popup maxWidth={300}>
@@ -153,4 +156,21 @@ export const MapComponent = ({ scanEvents }: MapComponentProps) => {
       ))}
     </MapContainer>
   );
+};
+
+// Component to handle bounds updates
+const BoundsUpdater = ({ events }: { events: ScanEvent[] }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (events.length > 0) {
+      if (typeof window !== "undefined") {
+        const L = require("leaflet");
+        const bounds = L.latLngBounds(events.map(e => [e.latitude, e.longitude]));
+        map.fitBounds(bounds, { padding: [50, 50] });
+      }
+    }
+  }, [events, map]);
+
+  return null;
 };

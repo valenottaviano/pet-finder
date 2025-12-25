@@ -16,6 +16,7 @@ import { MapPin, Clock, Smartphone, Eye, BarChart3 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 import { getPetScanEvents, getPetScanStats } from "../_actions/scan-events";
+import { cn } from "@/lib/utils";
 
 interface ScanEvent {
   id: string;
@@ -45,9 +46,10 @@ interface ScanStats {
 interface PetScanEventsProps {
   petId: string;
   petName: string;
+  className?: string;
 }
 
-export const PetScanEvents = ({ petId, petName }: PetScanEventsProps) => {
+export const PetScanEvents = ({ petId, petName, className }: PetScanEventsProps) => {
   const [scanEvents, setScanEvents] = useState<ScanEvent[]>([]);
   const [stats, setStats] = useState<ScanStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -113,7 +115,7 @@ export const PetScanEvents = ({ petId, petName }: PetScanEventsProps) => {
 
   if (isLoading) {
     return (
-      <Card>
+      <Card className={cn("", className)}>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Eye className="h-5 w-5" />
@@ -134,7 +136,7 @@ export const PetScanEvents = ({ petId, petName }: PetScanEventsProps) => {
 
   if (error) {
     return (
-      <Card>
+      <Card className={cn("border-destructive/50", className)}>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Eye className="h-5 w-5" />
@@ -154,7 +156,7 @@ export const PetScanEvents = ({ petId, petName }: PetScanEventsProps) => {
   }
 
   return (
-    <Card>
+    <Card className={cn("", className)}>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">

@@ -3,12 +3,11 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
   PawPrint,
-  Mail,
-  Phone,
   MapPin,
-  Facebook,
-  Twitter,
-  Instagram,
+  ShieldCheck,
+  Users,
+  Search,
+  ArrowRight,
 } from "lucide-react";
 import { auth } from "@/auth";
 
@@ -16,36 +15,33 @@ export default async function HomePage() {
   const session = await auth();
 
   return (
-    <div className="font-sans min-h-screen flex flex-col">
-      {/* Navigation Bar */}
-      <nav className="fixed top-0 left-0 right-0 h-16 bg-background border-b border-border shadow-sm z-50">
+    <div className="font-sans min-h-screen flex flex-col bg-background text-foreground overflow-x-hidden">
+      {/* Navigation Bar - Glassmorphism */}
+      <nav className="fixed top-0 left-0 right-0 h-16 bg-background/80 backdrop-blur-md z-50 border-b border-border/40 supports-[backdrop-filter]:bg-background/60">
         <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <Link
             href="/"
-            className="flex items-center gap-2 text-xl font-bold text-foreground"
+            className="flex items-center gap-2 text-xl font-semibold tracking-tight text-foreground hover:opacity-80 transition-opacity"
           >
-            <PawPrint className="h-6 w-6 text-primary" />
-            PetFinder
+            <PawPrint className="h-5 w-5" />
+            <span>PetFinder</span>
           </Link>
           <div className="flex items-center gap-4">
             {session ? (
               <Link href="/home">
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                <Button variant="default" size="sm">
                   Mi Cuenta
                 </Button>
               </Link>
             ) : (
               <>
-                <Link href="/auth/login">
-                  <Button
-                    variant="ghost"
-                    className="text-foreground hover:text-primary"
-                  >
+                <Link href="/auth/login" className="hidden sm:block">
+                  <Button variant="ghost" size="sm" className="text-sm font-normal">
                     Iniciar Sesión
                   </Button>
                 </Link>
                 <Link href="/auth/register">
-                  <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                  <Button variant="default" size="sm">
                     Registrarse
                   </Button>
                 </Link>
@@ -55,331 +51,172 @@ export default async function HomePage() {
         </div>
       </nav>
 
-      {/* Spacer for fixed navbar */}
-      <div className="h-16"></div>
-
       {/* Hero Section */}
-      <div className="bg-primary py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-left">
-              <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
-                Nunca Pierdas a Tu Mejor Amigo
-              </h1>
-              <p className="text-xl sm:text-2xl text-foreground/80 mb-8 max-w-3xl">
-                Protege a tus mascotas con códigos QR inteligentes y conecta
-                instantáneamente con quien las encuentre. Tu tranquilidad está a
-                solo un escaneo de distancia.
-              </p>
-              <Link href="/auth/register">
-                <Button className="bg-foreground text-background text-lg px-8 py-3 rounded-full hover:bg-foreground/90">
-                  Registra Tu Mascota Hoy
-                </Button>
-              </Link>
-            </div>
-            <div className="order-first lg:order-last">
-              <div className="relative h-[400px] rounded-2xl overflow-hidden">
-                <Image
-                  src="/images/foto_1.jpg"
-                  alt="Persona feliz abrazando a su perro"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Features Section */}
-      <div className="py-16 px-4 sm:px-6 lg:px-8 bg-background">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Feature 1 */}
-            <div className="bg-muted p-6 rounded-lg border border-border">
-              <h3 className="text-xl font-semibold mb-4 text-foreground">
-                Protección con QR Inteligente
-              </h3>
-              <p className="text-muted-foreground">
-                Cada mascota obtiene una etiqueta QR única. Al escanearla,
-                conecta instantáneamente a quien la encuentra con el dueño - no
-                se requiere app.
-              </p>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="bg-muted p-6 rounded-lg border border-border">
-              <h3 className="text-xl font-semibold mb-4 text-foreground">
-                Seguimiento de Ubicación en Vivo
-              </h3>
-              <p className="text-muted-foreground">
-                Mira dónde fue escaneada tu mascota por última vez. Recibe
-                notificaciones en tiempo real y datos de ubicación para guiar tu
-                búsqueda.
-              </p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="bg-muted p-6 rounded-lg border border-border">
-              <h3 className="text-xl font-semibold mb-4 text-foreground">
-                Apoyo Comunitario
-              </h3>
-              <p className="text-muted-foreground">
-                Únete a nuestro foro comunitario donde vecinos ayudan a vecinos.
-                Reporta mascotas encontradas y ayuda a otros a reunirse con sus
-                seres queridos.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Community Section */}
-      <div className="py-16 px-4 sm:px-6 lg:px-8 bg-background">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-              Únete a Nuestra Comunidad en Crecimiento
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-12">
-              Conéctate con amantes de las mascotas en tu área. Juntos, creamos
-              una comunidad más segura para nuestros amigos peludos.
-            </p>
-          </div>
-          <div className="relative h-[500px] md:h-[600px] rounded-2xl overflow-hidden mb-8">
-            <Image
-              src="/images/Community.jpg"
-              alt="Comunidad de dueños de mascotas reunidos"
-              fill
-              className="object-cover object-center"
-              sizes="(max-width: 768px) 100vw, 1200px"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Interactive Map Section */}
-      <div className="py-16 px-4 sm:px-6 lg:px-8 bg-muted">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-              Mascotas Perdidas en Tu Área
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Visualiza ubicaciones en tiempo real de mascotas perdidas en tu
-              comunidad. Cada marcador representa una mascota esperando ser
-              encontrada y reunida con su familia.
-            </p>
-          </div>
-          <div className="w-full h-[600px] bg-background border border-border rounded-xl shadow-inner flex items-center justify-center">
-            {/* Map component will be placed here */}
-            <p className="text-muted-foreground text-lg">
-              Mapa interactivo próximamente...
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Call to Action Section */}
-      <div className="bg-foreground text-background py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-            ¿Listo para Proteger a Tu Mascota?
-          </h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
-            Únete a miles de dueños de mascotas que duermen mejor sabiendo que
-            sus mascotas están protegidas con el sistema de rastreo inteligente
-            de Petfinder.
+      <main className="flex-grow pt-32 pb-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+          <h1 className="text-5xl md:text-7xl font-semibold tracking-tighter text-foreground max-w-4xl mx-auto leading-[1.1]">
+            Nunca pierdas a <br className="hidden md:block" />
+            <span className="text-primary">tu mejor amigo.</span>
+          </h1>
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto font-light leading-relaxed">
+            La red de seguridad más avanzada para tus mascotas. 
+            Tecnología inteligente y una comunidad que cuida.
           </p>
-          <div className="space-x-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <Link href="/auth/register">
-              <Button className="bg-primary text-foreground text-lg px-8 py-3 rounded-full hover:bg-primary/90">
-                Comenzar
+              <Button size="lg" className="px-8 text-lg h-14">
+                Comenzar ahora
               </Button>
             </Link>
-            <Link href="/about">
-              <Button
-                variant="outline"
-                className="bg-transparent border-2 border-background text-background text-lg px-8 py-3 rounded-full hover:bg-background hover:text-foreground"
-              >
-                Conocer Más
+            <Link href="/how-it-works">
+              <Button variant="link" size="lg" className="text-lg h-14 gap-2">
+                Ver cómo funciona <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
+          </div>
+
+          <div className="mt-16 sm:mt-24 relative rounded-3xl overflow-hidden shadow-2xl border border-border/50 aspect-[16/9] md:aspect-[21/9]">
+             <Image
+              src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?q=80&w=2486&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="Mascota feliz"
+              fill
+              className="object-cover"
+              priority
+              sizes="100vw"
+            />
+            {/* <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent" /> */}
           </div>
         </div>
-      </div>
 
-      {/* Footer */}
-      <footer className="bg-foreground text-background/70">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-            {/* Company Info */}
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <PawPrint className="h-6 w-6 text-primary" />
-                <span className="text-xl font-bold text-background">
-                  PetFinder
-                </span>
+        {/* Bento Grid Features */}
+        <div className="max-w-7xl mx-auto mt-32 space-y-4">
+           <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-center mb-16">
+            Protección integral.
+            <span className="block text-muted-foreground mt-2 text-2xl md:text-4xl">Diseñada para la tranquilidad.</span>
+           </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Feature 1 - Large Card */}
+            <div className="md:col-span-2 bg-secondary/50 rounded-3xl p-8 md:p-12 flex flex-col justify-between relative overflow-hidden group hover:bg-secondary/70 transition-colors">
+              <div className="z-10 relative">
+                <div className="bg-background w-12 h-12 rounded-2xl flex items-center justify-center mb-6 shadow-sm">
+                   <ShieldCheck className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-2xl md:text-3xl font-medium mb-4">QR Inteligente</h3>
+                <p className="text-muted-foreground text-lg max-w-md">
+                  Cada etiqueta es única. Al escanearla, quien encuentre a tu mascota podrá contactarte al instante sin necesidad de apps adicionales.
+                </p>
               </div>
-              <p className="text-sm mb-4">
-                Protegiendo a tus mascotas con tecnología inteligente. Nunca más
-                pierdas a tu mejor amigo.
-              </p>
-              <div className="flex gap-4">
-                <a href="#" className="hover:text-primary transition-colors">
-                  <Facebook className="h-5 w-5" />
-                </a>
-                <a href="#" className="hover:text-primary transition-colors">
-                  <Twitter className="h-5 w-5" />
-                </a>
-                <a href="#" className="hover:text-primary transition-colors">
-                  <Instagram className="h-5 w-5" />
-                </a>
-              </div>
+               {/* Decorative background element could go here */}
             </div>
 
-            {/* Quick Links */}
-            <div>
-              <h3 className="text-white font-semibold mb-4">Enlaces Rápidos</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link
-                    href="/auth/register"
-                    className="hover:text-primary transition-colors"
-                  >
-                    Registrar Mascota
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/about"
-                    className="hover:text-primary transition-colors"
-                  >
-                    Sobre Nosotros
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/how-it-works"
-                    className="hover:text-primary transition-colors"
-                  >
-                    Cómo Funciona
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/pricing"
-                    className="hover:text-primary transition-colors"
-                  >
-                    Precios
-                  </Link>
-                </li>
-              </ul>
+            {/* Feature 2 - Small Card */}
+            <div className="bg-secondary/50 rounded-3xl p-8 md:p-12 flex flex-col justify-between relative overflow-hidden group hover:bg-secondary/70 transition-colors">
+               <div className="z-10 relative">
+                 <div className="bg-background w-12 h-12 rounded-2xl flex items-center justify-center mb-6 shadow-sm">
+                   <MapPin className="h-6 w-6 text-primary" />
+                 </div>
+                 <h3 className="text-2xl font-medium mb-4">Ubicación Real</h3>
+                 <p className="text-muted-foreground text-lg">
+                   Recibe alertas instantáneas con la ubicación exacta del escaneo.
+                 </p>
+               </div>
             </div>
 
-            {/* Support */}
-            <div>
-              <h3 className="text-white font-semibold mb-4">Soporte</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link
-                    href="/help"
-                    className="hover:text-primary transition-colors"
-                  >
-                    Centro de Ayuda
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/faq"
-                    className="hover:text-primary transition-colors"
-                  >
-                    Preguntas Frecuentes
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/contact"
-                    className="hover:text-primary transition-colors"
-                  >
-                    Contacto
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/privacy"
-                    className="hover:text-primary transition-colors"
-                  >
-                    Privacidad
-                  </Link>
-                </li>
-              </ul>
+             {/* Feature 3 - Small Card */}
+             <div className="bg-secondary/50 rounded-3xl p-8 md:p-12 flex flex-col justify-between relative overflow-hidden group hover:bg-secondary/70 transition-colors">
+               <div className="z-10 relative">
+                 <div className="bg-background w-12 h-12 rounded-2xl flex items-center justify-center mb-6 shadow-sm">
+                   <Users className="h-6 w-6 text-primary" />
+                 </div>
+                 <h3 className="text-2xl font-medium mb-4">Comunidad</h3>
+                 <p className="text-muted-foreground text-lg">
+                   Una red de vecinos alertas listos para ayudar en la búsqueda.
+                 </p>
+               </div>
             </div>
 
-            {/* Contact Info */}
-            <div>
-              <h3 className="text-background font-semibold mb-4">Contacto</h3>
-              <ul className="space-y-3 text-sm">
-                <li className="flex items-start gap-2">
-                  <Mail className="h-4 w-4 mt-0.5 text-primary" />
-                  <a
-                    href="mailto:info@petfinder.com"
-                    className="hover:text-primary transition-colors"
-                  >
-                    info@petfinder.com
-                  </a>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Phone className="h-4 w-4 mt-0.5 text-primary" />
-                  <a
-                    href="tel:+1234567890"
-                    className="hover:text-primary transition-colors"
-                  >
-                    +123 456 7890
-                  </a>
-                </li>
-                <li className="flex items-start gap-2">
-                  <MapPin className="h-4 w-4 mt-0.5 text-primary" />
-                  <span>
-                    123 Pet Street
-                    <br />
-                    Ciudad, País
-                  </span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Bottom Bar */}
-          <div className="border-t border-background/20 pt-8">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-              <p>
-                © {new Date().getFullYear()} PetFinder. Todos los derechos
-                reservados.
-              </p>
-              <div className="flex gap-6">
-                <Link
-                  href="/terms"
-                  className="hover:text-primary transition-colors"
-                >
-                  Términos de Uso
-                </Link>
-                <Link
-                  href="/privacy"
-                  className="hover:text-primary transition-colors"
-                >
-                  Política de Privacidad
-                </Link>
-                <Link
-                  href="/cookies"
-                  className="hover:text-primary transition-colors"
-                >
-                  Cookies
-                </Link>
+            {/* Feature 4 - Large Card */}
+            <div className="md:col-span-2 bg-secondary/50 rounded-3xl p-8 md:p-12 flex flex-col justify-between relative overflow-hidden group hover:bg-secondary/70 transition-colors">
+              <div className="z-10 relative">
+                <div className="bg-background w-12 h-12 rounded-2xl flex items-center justify-center mb-6 shadow-sm">
+                   <Search className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-2xl md:text-3xl font-medium mb-4">Búsqueda Activa</h3>
+                <p className="text-muted-foreground text-lg max-w-md">
+                  Herramientas avanzadas para difundir alertas de mascotas perdidas en tu zona y maximizar las posibilidades de reencuentro.
+                </p>
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Community Image Section */}
+        <div className="max-w-7xl mx-auto mt-32 relative rounded-3xl overflow-hidden aspect-[4/3] md:aspect-[21/9]">
+           <Image
+              src="https://images.unsplash.com/photo-1545529468-42764ef8c85f?q=80&w=2346&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="Comunidad PetFinder"
+              fill
+              className="object-cover"
+              sizes="100vw"
+            />
+            <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+              <div className="text-center text-white px-4">
+                <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">Únete a la red.</h2>
+                <Link href="/auth/register">
+                  <Button size="lg" className="bg-white text-black hover:bg-white/90 border-none h-14 px-8 text-lg">
+                    Registrarse Gratis
+                  </Button>
+                </Link>
+              </div>
+            </div>
+        </div>
+      </main>
+
+      {/* Minimal Footer */}
+      <footer className="bg-background border-t border-border py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+            <div className="col-span-2 md:col-span-1">
+               <div className="flex items-center gap-2 mb-4">
+                <PawPrint className="h-5 w-5" />
+                <span className="font-semibold text-lg">PetFinder</span>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Diseñado con amor para proteger a quienes más quieres.
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="font-medium mb-4">Producto</h4>
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                <li><Link href="/how-it-works" className="hover:text-foreground transition-colors">Cómo funciona</Link></li>
+                <li><Link href="/pricing" className="hover:text-foreground transition-colors">Precios</Link></li>
+                <li><Link href="/faqs" className="hover:text-foreground transition-colors">Preguntas frecuentes</Link></li>
+              </ul>
+            </div>
+
+             <div>
+              <h4 className="font-medium mb-4">Compañía</h4>
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                <li><Link href="/about" className="hover:text-foreground transition-colors">Nosotros</Link></li>
+                <li><Link href="/contact" className="hover:text-foreground transition-colors">Contacto</Link></li>
+                <li><Link href="/privacy" className="hover:text-foreground transition-colors">Privacidad</Link></li>
+              </ul>
+            </div>
+
+             <div>
+              <h4 className="font-medium mb-4">Soporte</h4>
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                <li><Link href="/help" className="hover:text-foreground transition-colors">Centro de ayuda</Link></li>
+                <li><Link href="/terms" className="hover:text-foreground transition-colors">Términos</Link></li>
+              </ul>
+            </div>
+        </div>
+        <div className="max-w-7xl mx-auto pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
+           <p>© {new Date().getFullYear()} PetFinder Inc.</p>
+           <div className="flex gap-4 mt-4 md:mt-0">
+             {/* Social icons could go here */}
+           </div>
         </div>
       </footer>
     </div>

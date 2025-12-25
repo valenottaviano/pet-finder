@@ -4,18 +4,33 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, Heart, Info, Mail, User, Phone } from "lucide-react";
+import { Calendar, Heart, Info, Mail, User, Phone, MapPin, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Metadata } from "next";
 import { QRScanHandler } from "./qr-scan-handler";
 import { GenericQRCodeClaim } from "./generic-qr-claim";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface PageProps {
   params: Promise<{
     petId: string;
   }>;
 }
+
+const getPetTypeLabel = (type: string) => {
+  const types: Record<string, string> = {
+    DOG: "Perro",
+    CAT: "Gato",
+    BIRD: "Pájaro",
+    RABBIT: "Conejo",
+    HAMSTER: "Hámster",
+    FISH: "Pez",
+    REPTILE: "Reptil",
+    OTHER: "Otro",
+  };
+  return types[type] || type;
+};
 
 export async function generateMetadata({
   params,
@@ -81,20 +96,6 @@ const formatAge = (birthDate: Date | null) => {
     const years = Math.floor(diffDays / 365);
     return `${years} año${years > 1 ? "s" : ""}`;
   }
-};
-
-const getPetTypeLabel = (type: string) => {
-  const types: Record<string, string> = {
-    DOG: "Perro",
-    CAT: "Gato",
-    BIRD: "Pájaro",
-    RABBIT: "Conejo",
-    HAMSTER: "Hámster",
-    FISH: "Pez",
-    REPTILE: "Reptil",
-    OTHER: "Otro",
-  };
-  return types[type] || type;
 };
 
 const getSexLabel = (sex: string) => {
@@ -169,215 +170,141 @@ export default async function PublicPetPage({ params }: PageProps) {
   const age = formatAge(pet.birthDate);
   const sizeLabel = getSizeLabel(pet.size);
   const hairTypeLabel = getHairTypeLabel(pet.hairType);
+  const mainPhoto = pet.photos.length > 0 ? pet.photos[0].url : null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Images Section */}
-          <div className="space-y-4">
-            {pet.photos.length > 0 ? (
-              <>
-                {/* Main Image */}
-                <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
-                  <Image
-                    src={pet.photos[0].url}
-                    alt={`Foto principal de ${pet.name}`}
-                    fill
-                    className="object-cover"
-                    priority
-                  />
-                </div>
-
-                {/* Additional Images */}
-                {pet.photos.length > 1 && (
-                  <div className="grid grid-cols-3 gap-2">
-                    {pet.photos.slice(1).map((photo, index) => (
-                      <div
-                        key={photo.id}
-                        className="relative aspect-square rounded-md overflow-hidden bg-gray-100"
-                      >
-                        <Image
-                          src={photo.url}
-                          alt={`Foto ${index + 2} de ${pet.name}`}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </>
+    <div className="min-h-screen bg-background text-foreground pb-24">
+       {/* Hero / Contact Poster Area */}
+       <div className="relative w-full h-[50vh] md:h-[60vh] bg-muted overflow-hidden flex items-end justify-center">
+            {mainPhoto ? (
+               <Image 
+                 src={mainPhoto} 
+                 alt={pet.name} 
+                 fill 
+                 className="object-cover" 
+                 priority 
+               />
             ) : (
-              <div className="aspect-square rounded-lg bg-gray-200 flex items-center justify-center">
-                <div className="text-center text-gray-500">
-                  <Heart className="h-16 w-16 mx-auto mb-2" />
-                  <p>Sin fotos disponibles</p>
+                <div className="flex flex-col items-center justify-center h-full text-muted-foreground bg-secondary/30 w-full">
+                    <Heart className="h-24 w-24 mb-4 opacity-20" />
+                    <p className="text-xl font-medium opacity-50">Sin foto de perfil</p>
                 </div>
-              </div>
             )}
-          </div>
+            <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background via-background/80 to-transparent" />
+            
+            <div className="absolute bottom-8 text-center space-y-2 z-10 w-full px-4">
+                 <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-foreground drop-shadow-sm">
+                    {pet.name}
+                 </h1>
+                 <p className="text-xl md:text-2xl text-muted-foreground font-medium">
+                    {getPetTypeLabel(pet.type)} • {pet.breed || 'Raza desconocida'}
+                 </p>
+            </div>
+       </div>
 
-          {/* Pet Information */}
-          <div className="space-y-6">
-            {/* Basic Info Card */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Heart className="h-5 w-5 text-primary" />
-                  {pet.name}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm text-gray-600">Tipo</p>
-                    <Badge variant="outline">{getPetTypeLabel(pet.type)}</Badge>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600">Sexo</p>
-                    <Badge variant="outline">{getSexLabel(pet.sex)}</Badge>
-                  </div>
-                </div>
-
-                {age && (
-                  <div>
-                    <p className="text-sm text-gray-600">Edad</p>
-                    <p className="font-medium">{age}</p>
-                  </div>
-                )}
-
-                {pet.breed && (
-                  <div>
-                    <p className="text-sm text-gray-600">Raza</p>
-                    <p className="font-medium">{pet.breed}</p>
-                  </div>
-                )}
-
-                {sizeLabel && (
-                  <div>
-                    <p className="text-sm text-gray-600">Tamaño</p>
-                    <Badge variant="outline">{sizeLabel}</Badge>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Physical Characteristics */}
-            {(pet.color || hairTypeLabel || pet.hairPattern) && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Info className="h-5 w-5 text-primary" />
-                    Características Físicas
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {pet.color && (
-                    <div>
-                      <p className="text-sm text-gray-600">Color</p>
-                      <p className="font-medium">{pet.color}</p>
-                    </div>
-                  )}
-
-                  {hairTypeLabel && (
-                    <div>
-                      <p className="text-sm text-gray-600">Tipo de pelo</p>
-                      <Badge variant="outline">{hairTypeLabel}</Badge>
-                    </div>
-                  )}
-
-                  {pet.hairPattern && (
-                    <div>
-                      <p className="text-sm text-gray-600">Patrón del pelo</p>
-                      <p className="font-medium">{pet.hairPattern}</p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Owner Contact */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="h-5 w-5 text-primary" />
-                  Información del Dueño
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {pet.user.name && (
-                  <div>
-                    <p className="text-sm text-gray-600">Nombre</p>
-                    <p className="font-medium">{pet.user.name}</p>
-                  </div>
-                )}
-
-                <div className="space-y-2">
-                  <p className="text-sm text-gray-600">Contacto</p>
-                  <div className="space-y-2">
-                    <Button variant="outline" className="w-full" asChild>
-                      <a href={`mailto:${pet.user.email}`}>
-                        <Mail className="h-4 w-4 mr-2" />
-                        Enviar Email
-                      </a>
-                    </Button>
-                    {pet.user.phone && (
-                      <Button
-                        variant="outline"
-                        className="w-full bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
-                        asChild
-                      >
-                        <a
-                          href={generateWhatsAppLink(pet.user.phone, pet.name)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <Phone className="h-4 w-4 mr-2" />
-                          WhatsApp {formatPhoneDisplay(pet.user.phone)}
+       <div className="max-w-3xl mx-auto px-4 sm:px-6 -mt-4 relative z-20 space-y-8">
+           
+           {/* Primary Actions */}
+           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                {pet.user.phone && (
+                    <Button size="lg" className="w-full sm:w-auto rounded-full h-14 px-8 text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105 bg-green-500 hover:bg-green-600 text-white border-none" asChild>
+                        <a href={generateWhatsAppLink(pet.user.phone, pet.name)} target="_blank" rel="noopener noreferrer">
+                           <Phone className="mr-2 h-5 w-5" />
+                           WhatsApp
                         </a>
-                      </Button>
-                    )}
-                  </div>
+                    </Button>
+                )}
+                <Button size="lg" variant="secondary" className="w-full sm:w-auto rounded-full h-14 px-8 text-lg shadow-md hover:bg-secondary/80" asChild>
+                     <a href={`mailto:${pet.user.email}`}>
+                        <Mail className="mr-2 h-5 w-5" />
+                        Enviar Email
+                     </a>
+                </Button>
+           </div>
+
+           {/* Info Grid (Bento) */}
+           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+               {/* Age */}
+               <div className="bg-secondary/30 rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-2 aspect-square">
+                   <Calendar className="h-8 w-8 text-primary opacity-80" />
+                   <span className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Edad</span>
+                   <span className="text-xl font-bold">{age || 'Desconocida'}</span>
+               </div>
+               
+               {/* Sex */}
+               <div className="bg-secondary/30 rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-2 aspect-square">
+                   <div className="font-bold text-2xl text-primary">{pet.sex === 'MALE' ? '♂' : pet.sex === 'FEMALE' ? '♀' : '?'}</div>
+                   <span className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Sexo</span>
+                   <span className="text-xl font-bold">{getSexLabel(pet.sex)}</span>
+               </div>
+
+               {/* Size */}
+               <div className="bg-secondary/30 rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-2 aspect-square">
+                   <Info className="h-8 w-8 text-primary opacity-80" />
+                   <span className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Tamaño</span>
+                   <span className="text-xl font-bold">{getSizeLabel(pet.size) || 'N/A'}</span>
+               </div>
+
+               {/* Owner */}
+               <div className="bg-secondary/30 rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-2 aspect-square">
+                   <Avatar className="h-10 w-10">
+                        <AvatarFallback>{pet.user.name?.[0] || 'D'}</AvatarFallback>
+                   </Avatar>
+                   <span className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Dueño</span>
+                   <span className="text-lg font-bold truncate max-w-full px-2">{pet.user.name?.split(' ')[0] || 'Usuario'}</span>
+               </div>
+           </div>
+            
+           {/* Detailed Characteristics */}
+           {(pet.color || hairTypeLabel || pet.hairPattern) && (
+             <div className="bg-secondary/20 rounded-3xl p-8 space-y-4">
+                <h3 className="text-xl font-semibold tracking-tight">Características Físicas</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                     {pet.color && (
+                        <div className="flex flex-col">
+                            <span className="text-sm text-muted-foreground">Color</span>
+                            <span className="font-medium text-lg">{pet.color}</span>
+                        </div>
+                     )}
+                     {hairTypeLabel && (
+                        <div className="flex flex-col">
+                            <span className="text-sm text-muted-foreground">Pelaje</span>
+                            <span className="font-medium text-lg">{hairTypeLabel}</span>
+                        </div>
+                     )}
+                     {pet.hairPattern && (
+                        <div className="flex flex-col">
+                            <span className="text-sm text-muted-foreground">Patrón</span>
+                             <span className="font-medium text-lg">{pet.hairPattern}</span>
+                        </div>
+                     )}
                 </div>
-              </CardContent>
-            </Card>
+             </div>
+           )}
 
-            {/* Registration Date */}
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Calendar className="h-4 w-4" />
-                  Registrado el {formatDate(pet.createdAt)}
+            {/* Gallery (if more photos) */}
+            {pet.photos.length > 1 && (
+                <div className="space-y-4">
+                    <h3 className="text-xl font-semibold tracking-tight px-2">Más Fotos</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                         {pet.photos.slice(1).map((photo) => (
+                             <div key={photo.id} className="aspect-square relative rounded-2xl overflow-hidden bg-muted">
+                                 <Image src={photo.url} alt="Foto de mascota" fill className="object-cover hover:scale-105 transition-transform duration-500" />
+                             </div>
+                         ))}
+                    </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </div>
+            )}
+           
+           <div className="flex justify-center pt-8 opacity-50">
+               <div className="flex items-center gap-2">
+                   <Badge variant="outline" className="text-xs font-normal">PetFinder ID: {pet.id.slice(0,8)}</Badge>
+               </div>
+           </div>
 
-      {/* Floating WhatsApp Contact Button */}
-      {pet.user.phone && (
-        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
-          <Button
-            size="lg"
-            className="bg-green-500 hover:bg-green-600 text-white shadow-lg rounded-full px-6 py-3 transition-all duration-200 hover:scale-105"
-            asChild
-          >
-            <a
-              href={generateWhatsAppLink(pet.user.phone, pet.name)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2"
-            >
-              <Phone className="h-5 w-5" />
-              Contactar dueño
-            </a>
-          </Button>
-        </div>
-      )}
+       </div>
 
-      {/* QR Scan Handler */}
+      {/* QR Scan Handler (Invisible) */}
       <QRScanHandler petId={pet.id} petName={pet.name} />
     </div>
   );

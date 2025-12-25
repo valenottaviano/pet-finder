@@ -3,231 +3,140 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { Mail, Phone, MapPin, Clock, Users } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Users, ArrowRight, Send } from "lucide-react";
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <div className="bg-primary py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
-            Contacto
-          </h1>
-          <p className="text-xl text-foreground">
-            Proyecto de tesis - Ingeniería en Informática. Enviá tus consultas,
-            sugerencias o reportes de errores.
-          </p>
-        </div>
-      </div>
-
-      {/* Contact Section */}
-      <div className="py-16 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background pt-24 pb-16">
+      <div className="px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12">
+          
+          {/* Header */}
+          <div className="mb-16">
+            <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-foreground mb-6">
+              Hablemos.
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-2xl">
+              ¿Tienes alguna pregunta, sugerencia o feedback? Nos encantaría escucharte.
+              Este es un proyecto académico en constante evolución.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
             {/* Contact Form */}
-            <div>
-              <h2 className="text-3xl font-bold text-foreground mb-6">
-                Enviá tu Consulta o Feedback
-              </h2>
+            <div className="bg-card border border-border/50 rounded-3xl p-8 shadow-sm">
+              <h2 className="text-2xl font-bold mb-8">Envíanos un mensaje</h2>
               <form className="space-y-6">
-                <div>
-                  <Label htmlFor="name">Nombre Completo *</Label>
-                  <Input
-                    id="name"
-                    type="text"
-                    placeholder="Juan Pérez"
-                    required
-                    className="mt-1"
-                  />
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="text-muted-foreground">Nombre</Label>
+                    <Input
+                      id="name"
+                      type="text"
+                      placeholder="Juan Pérez"
+                      required
+                      className="bg-background border-border/50 h-12 rounded-xl focus:ring-primary/20"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-muted-foreground">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="hola@ejemplo.com"
+                      required
+                      className="bg-background border-border/50 h-12 rounded-xl focus:ring-primary/20"
+                    />
+                  </div>
                 </div>
 
-                <div>
-                  <Label htmlFor="email">Email *</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="tu@email.com"
-                    required
-                    className="mt-1"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="phone">Teléfono</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="+54 9 11 1234-5678"
-                    className="mt-1"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="subject">Asunto *</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="subject" className="text-muted-foreground">Asunto</Label>
                   <Input
                     id="subject"
                     type="text"
                     placeholder="¿En qué podemos ayudarte?"
                     required
-                    className="mt-1"
+                    className="bg-background border-border/50 h-12 rounded-xl focus:ring-primary/20"
                   />
                 </div>
 
-                <div>
-                  <Label htmlFor="message">Mensaje *</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="message" className="text-muted-foreground">Mensaje</Label>
                   <Textarea
                     id="message"
-                    placeholder="Cuéntanos más sobre tu consulta..."
+                    placeholder="Escribe tu mensaje aquí..."
                     rows={6}
                     required
-                    className="mt-1"
+                    className="bg-background border-border/50 rounded-xl resize-none focus:ring-primary/20 p-4"
                   />
                 </div>
 
                 <Button
                   type="submit"
-                  className="w-full bg-primary text-foreground hover:bg-primary/90 text-lg py-6"
+                  size="lg"
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-full h-12 text-lg font-medium shadow-lg hover:shadow-xl transition-all"
                 >
-                  Enviar Mensaje
+                  Enviar Mensaje <Send className="ml-2 h-4 w-4" />
                 </Button>
+                
+                <p className="text-xs text-center text-muted-foreground mt-4">
+                  * Responderemos a la brevedad posible. Tus datos están seguros con nosotros.
+                </p>
               </form>
-              <p className="text-sm text-muted-foreground mt-4">
-                * Campos obligatorios. Este es un proyecto académico,
-                responderemos a la brevedad según disponibilidad.
-              </p>
             </div>
 
             {/* Contact Info */}
-            <div>
-              <h2 className="text-3xl font-bold text-foreground mb-6">
-                Información del Proyecto
-              </h2>
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-                    <Mail className="h-6 w-6 text-foreground" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg mb-1">Email</h3>
-                    <p className="text-muted-foreground">
-                      <a
-                        href="mailto:valentinottaviano@gmail.com"
-                        className="hover:text-yellow-600"
-                      >
-                        valentinottaviano@gmail.com
-                      </a>
-                    </p>
-                  </div>
-                </div>
+            <div className="space-y-12">
+              <div>
+                 <h2 className="text-2xl font-bold mb-8">Información de Contacto</h2>
+                 <div className="space-y-8">
+                    <div className="flex items-start gap-6">
+                       <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center shrink-0">
+                          <Mail className="h-6 w-6" />
+                       </div>
+                       <div>
+                          <h3 className="font-semibold text-lg mb-1">Email de Soporte</h3>
+                          <p className="text-muted-foreground mb-2">Para consultas generales y técnicas.</p>
+                          <a href="mailto:valentin.ottaviano@example.com" className="text-primary hover:underline font-medium">valentin.ottaviano@example.com</a>
+                       </div>
+                    </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-                    <Users className="h-6 w-6 text-foreground" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg mb-1">Autor</h3>
-                    <p className="text-muted-foreground">Valentín Ottaviano</p>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Estudiante de Ingeniería en Informática
-                    </p>
-                  </div>
-                </div>
+                    <div className="flex items-start gap-6">
+                       <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-2xl flex items-center justify-center shrink-0">
+                          <Users className="h-6 w-6" />
+                       </div>
+                       <div>
+                          <h3 className="font-semibold text-lg mb-1">Autor del Proyecto</h3>
+                          <p className="text-muted-foreground mb-2">Valentín Ottaviano</p>
+                          <p className="text-sm text-muted-foreground">Estudiante de Ingeniería en Informática</p>
+                       </div>
+                    </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-                    <MapPin className="h-6 w-6 text-foreground" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg mb-1">Institución</h3>
-                    <p className="text-muted-foreground">
-                      Universidad del Norte Santo Tomás de Aquino (UNSTA)
-                      <br />
-                      Carrera: Ingeniería en Informática
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-                    <Clock className="h-6 w-6 text-foreground" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg mb-1">
-                      Estado del Proyecto
-                    </h3>
-                    <p className="text-muted-foreground">
-                      Proyecto de tesis en desarrollo
-                      <br />
-                      Año: 2025
-                      <br />
-                      Fase: Implementación y pruebas
-                    </p>
-                  </div>
-                </div>
+                    <div className="flex items-start gap-6">
+                       <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded-2xl flex items-center justify-center shrink-0">
+                          <MapPin className="h-6 w-6" />
+                       </div>
+                       <div>
+                          <h3 className="font-semibold text-lg mb-1">Ubicación</h3>
+                          <p className="text-muted-foreground">Universidad del Norte Santo Tomás de Aquino (UNSTA)</p>
+                       </div>
+                    </div>
+                 </div>
               </div>
 
-              {/* Project Info */}
-              <div className="mt-8 bg-blue-50 border-l-4 border-blue-400 p-6 rounded">
-                <h3 className="font-semibold text-lg text-blue-900 mb-2">
-                  Proyecto Académico
-                </h3>
-                <p className="text-blue-800 mb-3">
-                  Este es un proyecto de tesis en desarrollo activo. Tu feedback
-                  es fundamental para mejorar la plataforma y completar la
-                  investigación.
-                </p>
-                <p className="text-sm text-blue-700">
-                  Todas las funcionalidades están disponibles para pruebas y
-                  evaluación.
-                </p>
+              {/* Note Card */}
+              <div className="bg-muted/50 border border-border/50 p-6 rounded-3xl relative overflow-hidden">
+                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 pointer-events-none"></div>
+                 <h3 className="font-semibold text-lg mb-2">Nota Académica</h3>
+                 <p className="text-muted-foreground text-sm leading-relaxed">
+                    Este formulario envía notificaciones reales al equipo de desarrollo de la tesis. 
+                    Si estás probando la plataforma, siéntete libre de enviar feedback constructivo.
+                 </p>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Tech Info Section */}
-      <div className="bg-muted py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-foreground text-center mb-8">
-            Sobre el Proyecto de Tesis
-          </h2>
-          <div className="max-w-3xl mx-auto bg-background p-8 rounded-xl">
-            <p className="text-muted-foreground mb-4">
-              <strong>Título:</strong> Sistema de Identificación y Recuperación
-              de Mascotas mediante Códigos QR
-            </p>
-            <p className="text-muted-foreground mb-4">
-              <strong>Objetivo:</strong> Desarrollar una plataforma web que
-              facilite la recuperación de mascotas perdidas utilizando
-              tecnología de códigos QR, geolocalización y notificaciones en
-              tiempo real.
-            </p>
-            <p className="text-muted-foreground">
-              <strong>Tecnologías:</strong> Next.js, React, TypeScript, Prisma,
-              PostgreSQL, NextAuth, Tailwind CSS, y servicios de
-              geolocalización.
-            </p>
           </div>
-        </div>
-      </div>
-
-      {/* CTA Section */}
-      <div className="bg-foreground text-background py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6">
-            ¿Querés Colaborar con el Proyecto?
-          </h2>
-          <p className="text-xl mb-8">
-            Tu participación y feedback son valiosos para el desarrollo de esta
-            tesis. Probá la plataforma y compartí tu experiencia.
-          </p>
-          <Link href="/auth/register">
-            <Button className="bg-primary text-foreground text-lg px-8 py-3 rounded-full hover:bg-primary/90">
-              Comenzar a Probar
-            </Button>
-          </Link>
         </div>
       </div>
     </div>

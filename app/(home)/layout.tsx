@@ -17,7 +17,7 @@ export default async function HomeLayout({
   return (
     <AuthProvider session={session}>
       <NavigationBar />
-      <main className="container mx-auto md:pt-20 pb-20 min-h-screen">
+      <main className="max-w-5xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 min-h-screen bg-background">
         {children}
       </main>
     </AuthProvider>

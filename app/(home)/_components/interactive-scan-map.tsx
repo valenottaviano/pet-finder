@@ -1,20 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  MapPin,
-  RefreshCw,
-  Loader2,
-  Calendar,
-  Smartphone,
-  ExternalLink,
-} from "lucide-react";
-import { getAllUserScanEvents } from "../_actions/scan-events";
+import { MapPin, RefreshCw, Loader2, Calendar, ExternalLink } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
+import { getAllUserScanEvents } from "../_actions/scan-events";
 
 interface ScanEvent {
   id: string;
@@ -35,44 +29,21 @@ interface InteractiveScanMapProps {
   className?: string;
 }
 
-// Simple embedded map using OpenStreetMap
-const SimpleMap = ({ scanEvents }: { scanEvents: ScanEvent[] }) => {
-  if (scanEvents.length === 0) return null;
-
-  // Calculate center
-  const centerLat =
-    scanEvents.reduce((sum, event) => sum + event.latitude, 0) /
-    scanEvents.length;
-  const centerLng =
-    scanEvents.reduce((sum, event) => sum + event.longitude, 0) /
-    scanEvents.length;
-
-  // Create markers query string for OpenStreetMap
-  const markers = scanEvents
-    .map(
-      (event, index) => `markers=${event.latitude},${event.longitude},lightblue`
-    )
-    .join("&");
-
-  const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${
-    centerLng - 0.01
-  },${centerLat - 0.01},${centerLng + 0.01},${
-    centerLat + 0.01
-  }&layer=mapnik&marker=${centerLat},${centerLng}`;
-
-  return (
-    <div className="h-96 w-full rounded-lg overflow-hidden border">
-      <iframe
-        src={mapUrl}
-        width="100%"
-        height="100%"
-        style={{ border: "none" }}
-        title="Mapa de escaneos"
-        loading="lazy"
-      />
-    </div>
-  );
-};
+// Dynamic import of the full map component
+const DynamicMap = dynamic(
+  () => import("./map-component").then((mod) => mod.MapComponent),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-96 rounded-lg border flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
+          <p className="text-sm text-muted-foreground">Cargando mapa...</p>
+        </div>
+      </div>
+    ),
+  }
+);
 
 export const InteractiveScanMap = ({ className }: InteractiveScanMapProps) => {
   const [scanEvents, setScanEvents] = useState<ScanEvent[]>([]);
@@ -233,7 +204,7 @@ export const InteractiveScanMap = ({ className }: InteractiveScanMapProps) => {
       </CardHeader>
       <CardContent>
         <div className="h-96 rounded-lg overflow-hidden border">
-          <SimpleMap scanEvents={validScanEvents} />
+          <DynamicMap scanEvents={validScanEvents} />
         </div>
 
         {/* Scan Events List */}

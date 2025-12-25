@@ -17,13 +17,15 @@ import { Trash2 } from "lucide-react";
 import { deletePet } from "../_actions/delete-pet";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 interface DeletePetButtonProps {
   petId: string;
   petName: string;
+  className?: string;
 }
 
-export const DeletePetButton = ({ petId, petName }: DeletePetButtonProps) => {
+export const DeletePetButton = ({ petId, petName, className }: DeletePetButtonProps) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
@@ -47,7 +49,7 @@ export const DeletePetButton = ({ petId, petName }: DeletePetButtonProps) => {
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" className="w-full">
+        <Button variant="destructive" className={cn("w-full", className)}>
           <Trash2 className="h-4 w-4 mr-2" />
           Eliminar Mascota
         </Button>
